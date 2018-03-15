@@ -3,7 +3,6 @@
  * employees can store and keep track of all of the 
  * meetings that they have in the foreseeable future.
  * 
- * @author Archie Rutherford
  * @version 1.0
  */
 
