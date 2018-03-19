@@ -5,8 +5,10 @@
  */
 
 public class Employee {
-	
-	private String username;
+
+	private String uniqueUsername;
+	private String firstName;
+	private String lastName;
 	private boolean admin;
 	private Meeting headNode;
 	
@@ -14,8 +16,10 @@ public class Employee {
 	 * Blank Constructor for the Employee class.
 	 */
 	public Employee() {
-		
-		username = "";
+
+		uniqueUsername = "";
+		firstName = "";
+		lastName = "";
 		admin = false;
 		headNode = null;
 	}
@@ -23,12 +27,14 @@ public class Employee {
 	/**
 	 * Filled Constructor for the Employee class.
 	 * 
-	 * @param username The username of the employee.
+	 * @param uniqueUsername The username of the employee.
 	 * @param admin Whether this employee is an admin or not;
 	 */
-	public Employee(String username, boolean admin) {
+	public Employee(String uniqueUsername, String firstName, String lastName, boolean admin) {
 		
-		username = this.username;
+		uniqueUsername = this.uniqueUsername;
+		firstName = this.firstName;
+		lastName = this.lastName;
 		admin = this.admin;
 		headNode = null;
 	}
