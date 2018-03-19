@@ -60,9 +60,26 @@ public class Employee {
 	/**
 	 * Delete an element from the Linked List.
 	 */
-	public void delete() {
+	public void delete(Date date, LocalTime startTime) {
 		
+		int i = 0;
+		boolean found = false;
 		
+		while (i < meetingList.size() && !found) {
+			if (date == meetingList.get(i).getDate() && startTime == meetingList.get(i).getStartTime()) {
+				found = true;
+			}
+			else {
+				i++;
+			}
+		}
+		
+		if (found) {
+			meetingList.remove(i);
+		}
+		else {
+			System.out.println("Not Found");
+		}
 	}
 	
 	/**
