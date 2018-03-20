@@ -4,8 +4,7 @@
  * @version 1.0
  */
 
-import java.time.LocalTime;
-import java.util.Date;
+import java.time.*;
 import java.util.LinkedList;
 
 public class Employee {
@@ -51,16 +50,17 @@ public class Employee {
 	 * @param endTime The time the new meeting will end at.
 	 * @param description A description of the meeting.
 	 */
-	public void add(Date date, LocalTime startTime, LocalTime endTime, String description) {
+	public void add(int day, int month, int year, int startHour, int startMinute, int endHour, int endMinute,String description) {
 		
-		Meeting newMeeting = new Meeting(date, startTime, endTime, description);
+		Meeting newMeeting = new Meeting(LocalDate.of(year, month, day), LocalTime.of(startHour, startMinute), LocalTime.of(endHour, endMinute), description);
+	
 		meetingList.add(newMeeting);
 	}
 	
 	/**
 	 * Delete an element from the Linked List.
 	 */
-	public void delete(Date date, LocalTime startTime) {
+	public void delete(LocalDate date, LocalTime startTime) {
 		
 		int i = 0;
 		boolean found = false;
@@ -96,7 +96,7 @@ public class Employee {
 	public void print() {
 		
 		for (int i = 0; i < meetingList.size(); i++) {
-			System.out.println(meetingList.get(i).getDate() + " " + meetingList.get(i).getStartTime());
+			System.out.println(meetingList.get(i).getDescription());
 		}
 	}
 }

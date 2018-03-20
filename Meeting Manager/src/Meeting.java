@@ -5,11 +5,10 @@
  */
 
 import java.time.*;
-import java.util.Date;
 
 public class Meeting {
 
-		private Date date;
+		private LocalDate date;
 		private LocalTime startTime;
 		private LocalTime endTime;
 		private String description;
@@ -33,7 +32,7 @@ public class Meeting {
 		 * @param endTime The end time of the meeting.
 		 * @param description A description of what the meeting is about.
 		 */
-		public Meeting(Date date, LocalTime startTime, LocalTime endTime, String description) {
+		public Meeting(LocalDate date, LocalTime startTime, LocalTime endTime, String description) {
 			
 			date = this.date;
 			startTime = this.startTime;
@@ -41,11 +40,11 @@ public class Meeting {
 			description = this.description;
 		}
 
-		public Date getDate() {
+		public LocalDate getDate() {
 			return date;
 		}
 
-		public void setDate(Date date) {
+		public void setDate(LocalDate date) {
 			this.date = date;
 		}
 
