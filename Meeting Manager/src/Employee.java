@@ -35,10 +35,10 @@ public class Employee {
 	 */
 	public Employee(String uniqueUsername, String firstName, String lastName, boolean admin) {
 		
-		uniqueUsername = this.uniqueUsername;
-		firstName = this.firstName;
-		lastName = this.lastName;
-		admin = this.admin;
+		this.uniqueUsername = uniqueUsername;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.admin = admin;
 		meetingList = new LinkedList<Meeting>();
 	}
 	
@@ -136,21 +136,10 @@ public class Employee {
 		for (int i = 0; i < meetingList.size(); i++) {
 			System.out.println();
 			System.out.println(i);
-			System.out.println(meetingList.get(i).getDate());
-			System.out.println(meetingList.get(i).getStartTime());
-			System.out.println(meetingList.get(i).getEndTime());
-			System.out.println(meetingList.get(i).getDescription());
+			System.out.println("Date        : " + meetingList.get(i).getDate());
+			System.out.println("Start Time  : " + meetingList.get(i).getStartTime());
+			System.out.println("End Time    : " + meetingList.get(i).getEndTime());
+			System.out.println("Description : " + meetingList.get(i).getDescription());
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-

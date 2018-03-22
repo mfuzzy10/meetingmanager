@@ -34,10 +34,10 @@ public class Meeting {
 		 */
 		public Meeting(LocalDate date, LocalTime startTime, LocalTime endTime, String description) {
 			
-			date = this.date;
-			startTime = this.startTime;
-			endTime = this.endTime;
-			description = this.description;
+			this.date = date;
+			this.startTime = startTime;
+			this.endTime = endTime;
+			this.description = description;
 		}
 
 		public LocalDate getDate() {
