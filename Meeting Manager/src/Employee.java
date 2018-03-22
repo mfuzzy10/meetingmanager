@@ -42,6 +42,46 @@ public class Employee {
 		meetingList = new LinkedList<Meeting>();
 	}
 	
+	public String getUniqueUsername() {
+		return uniqueUsername;
+	}
+
+	public void setUniqueUsername(String uniqueUsername) {
+		this.uniqueUsername = uniqueUsername;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
+	public LinkedList<Meeting> getMeetingList() {
+		return meetingList;
+	}
+
+	public void setMeetingList(LinkedList<Meeting> meetingList) {
+		this.meetingList = meetingList;
+	}
+
 	/**
 	 * Add an element to the Linked List.
 	 * 
@@ -51,10 +91,8 @@ public class Employee {
 	 * @param description A description of the meeting.
 	 */
 	public void add(int day, int month, int year, int startHour, int startMinute, int endHour, int endMinute,String description) {
-		
-		Meeting newMeeting = new Meeting(LocalDate.of(year, month, day), LocalTime.of(startHour, startMinute), LocalTime.of(endHour, endMinute), description);
 	
-		meetingList.add(newMeeting);
+		meetingList.add(new Meeting(LocalDate.of(year, month, day), LocalTime.of(startHour, startMinute), LocalTime.of(endHour, endMinute), description));
 	}
 	
 	/**
@@ -96,6 +134,11 @@ public class Employee {
 	public void print() {
 		
 		for (int i = 0; i < meetingList.size(); i++) {
+			System.out.println();
+			System.out.println(i);
+			System.out.println(meetingList.get(i).getDate());
+			System.out.println(meetingList.get(i).getStartTime());
+			System.out.println(meetingList.get(i).getEndTime());
 			System.out.println(meetingList.get(i).getDescription());
 		}
 	}
