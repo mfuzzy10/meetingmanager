@@ -20,6 +20,7 @@ public class MeetingManager {
 	public boolean addMeeting(Meeting meetingToAdd) {
 		if (meetingCanBeAdded(meetingToAdd)) {
 			loggedInEmployee.getDiary().add(meetingToAdd);
+			return true;
 		}
 		
 		return false;
@@ -29,14 +30,20 @@ public class MeetingManager {
 	 * This method checks if there is space in the diary of the
 	 * loggedInEmployee for the meeting passed in by reference.
 	 * 
-	 * @param meetingToAdd
+	 * @param meetingToCheck
 	 * @return true: meeting can be added, false: meeting cannot be added
 	 */
-	private boolean meetingCanBeAdded(Meeting meetingToAdd) {
+	private boolean meetingCanBeAdded(Meeting meetingToCheck) {
 		
+		for (Meeting meeting : loggedInEmployee.getDiary()) {
+			if (meeting.getDate() == meetingToCheck.getDate()) {
+				if (meetingToCheck.getStartTime().isAfter(meeting.getStartTime()) && meetingToCheck.getEndTime().isBefore(meeting.getEndTime())) {
+					return false;
+				}
+			}
+		}
 		
-		
-		return false;
+		return true;
 	}
 
 	/**
