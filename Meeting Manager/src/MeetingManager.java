@@ -10,19 +10,38 @@ public class MeetingManager {
 	private LinkedList employees;
 	
 	/**
-	 * Adds the reference of the Meeting to be added to the LinkedList
-	 * of Meetings of the Employee requesting the operation (the employee
-	 * currently logged in).
+	 * This method adds the Meeting passed in by reference to
+	 * the diary of the loggedInEmployee, if there is space for the
+	 * meeting in the diary.
 	 * 
 	 * @param meetingToAdd reference of the meeting to be added
+	 * @return true: meeting was successfully added; false: meeting was not successfully added
 	 */
-	public void addMeeting(Meeting meetingToAdd) {
-		loggedInEmployee.getDiary().add(meetingToAdd);
+	public boolean addMeeting(Meeting meetingToAdd) {
+		if (meetingCanBeAdded(meetingToAdd)) {
+			loggedInEmployee.getDiary().add(meetingToAdd);
+		}
+		
+		return false;
 	}
 	
 	/**
-	 * Deletes the reference of the Meeting to be deleted from the LinkedList
-	 * of Meetings of the Employee requesting the operation (the employee
+	 * This method checks if there is space in the diary of the
+	 * loggedInEmployee for the meeting passed in by reference.
+	 * 
+	 * @param meetingToAdd
+	 * @return true: meeting can be added, false: meeting cannot be added
+	 */
+	private boolean meetingCanBeAdded(Meeting meetingToAdd) {
+		
+		
+		
+		return false;
+	}
+
+	/**
+	 * Deletes the reference of the Meeting to be deleted from the diary
+	 * of the Employee requesting the operation (the employee
 	 * currently logged in).
 	 * 
 	 * @param meetingToDelete reference of the meeting to be deleted
