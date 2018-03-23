@@ -1,0 +1,5 @@
+1. Have the method that checks if a meeting can be added, 'meetingCanBeAdded()', return an array of meetings it collides with
+   if it does, and otherwise return null.
+   
+2. Add a GUI user interface menu, over the MeetingManager class. (not before we finish all basic requirements. Until then
+   we can just have a text based menu)
