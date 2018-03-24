@@ -1,18 +1,15 @@
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class Meeting {
 
 	private String title;
 	private String description;
-	private LocalDate date;
-	private LocalTime startTime;
-	private LocalTime endTime;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
 	
-	public Meeting(String title, String description, LocalDate date, LocalTime startTime, LocalTime endTime) {
+	public Meeting(String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
 		this.title = title;
 		this.description = description;
-		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
@@ -41,42 +38,36 @@ public class Meeting {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	/**
-	 * @return the date
-	 */
-	public LocalDate getDate() {
-		return date;
-	}
-	/**
-	 * @param date the date to set
-	 */
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
+
 	/**
 	 * @return the startTime
 	 */
-	public LocalTime getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
+
 	/**
 	 * @param startTime the startTime to set
 	 */
-	public void setStartTime(LocalTime startTime) {
+	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
 	}
+
 	/**
 	 * @return the endTime
 	 */
-	public LocalTime getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
+
 	/**
 	 * @param endTime the endTime to set
 	 */
-	public void setEndTime(LocalTime endTime) {
+	public void setEndTime(LocalDateTime endTime) {
 		this.endTime = endTime;
 	}
+
+	
 	
 	
 }

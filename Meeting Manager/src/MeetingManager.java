@@ -9,7 +9,15 @@ public class MeetingManager {
 		loggedInEmployee = null;
 		employees = new LinkedList<Employee>();
 		Employee admin = new Employee("admin", "admin", "admin", "admin", AccountType.ADMIN);
+		Employee roman = new Employee("Roman", "Bridskiy", "romanbridskiy", "admin", AccountType.ADMIN);
+		Employee matt = new Employee("Matt", "Robb", "admin", "mattrobb", AccountType.ADMIN);
+		Employee archie = new Employee("Archie", "Chalmers", "archiechalmers", "admin", AccountType.ADMIN);
+		Employee oskar = new Employee("Oskar", "Jankowski", "oskarjankowski", "admin", AccountType.ADMIN);
 		employees.add(admin);
+		employees.add(roman);
+		employees.add(matt);
+		employees.add(archie);
+		employees.add(oskar);
 	}
 	
 	/**
@@ -43,6 +51,7 @@ public class MeetingManager {
 	public boolean addMeeting(Meeting meetingToAdd) {
 		if (meetingCanBeAdded(meetingToAdd)) {
 			loggedInEmployee.getDiary().add(meetingToAdd);
+			return true;
 		}
 		
 		return false;
@@ -58,11 +67,10 @@ public class MeetingManager {
 	private boolean meetingCanBeAdded(Meeting meetingToCheck) {
 		
 		for (Meeting meeting : loggedInEmployee.getDiary()) {
-			if (meeting.getDate() == meetingToCheck.getDate()) {
-				if (meetingToCheck.getStartTime().isAfter(meeting.getStartTime()) && meetingToCheck.getEndTime().isBefore(meeting.getEndTime())) {
-					return false;
-				}
+			if (meetingToCheck.getStartTime().isAfter(meeting.getStartTime()) && meetingToCheck.getEndTime().isBefore(meeting.getEndTime())) {
+				return false;
 			}
+			
 		}
 		
 		return true;
