@@ -8,11 +8,11 @@ public class MeetingManager {
 	public MeetingManager() {
 		loggedInEmployee = null;
 		employees = new LinkedList<Employee>();
-		Employee admin = new Employee("admin", "admin", "admin", "admin", AccountType.ADMIN);
-		Employee roman = new Employee("Roman", "Bridskiy", "romanbridskiy", "admin", AccountType.ADMIN);
-		Employee matt = new Employee("Matt", "Robb", "admin", "mattrobb", AccountType.ADMIN);
-		Employee archie = new Employee("Archie", "Chalmers", "archiechalmers", "admin", AccountType.ADMIN);
-		Employee oskar = new Employee("Oskar", "Jankowski", "oskarjankowski", "admin", AccountType.ADMIN);
+		Employee admin = new Employee("admin", "admin", "admin", "admin", "Computing", AccountType.ADMIN);
+		Employee roman = new Employee("Roman", "Bridskiy", "romanbridskiy",  "admin", "Computing", AccountType.ADMIN);
+		Employee matt = new Employee("Matt", "Robb", "mattrobb", "admin", "Computing", AccountType.ADMIN);
+		Employee archie = new Employee("Archie", "Chalmers", "archiechalmers", "admin", "Computing", AccountType.ADMIN);
+		Employee oskar = new Employee("Oskar", "Jankowski", "oskarjankowski", "admin", "Computing", AccountType.ADMIN);
 		employees.add(admin);
 		employees.add(roman);
 		employees.add(matt);
@@ -33,7 +33,6 @@ public class MeetingManager {
 				} else {
 					return false;
 				}
-				
 			}
 		}
 			
@@ -160,7 +159,7 @@ public class MeetingManager {
 	public boolean loadMeetingData() {
 		return false;
 	}
-
+	
 	/**
 	 * @return the loggedInEmployee
 	 */
@@ -189,6 +188,12 @@ public class MeetingManager {
 		this.employees = employees;
 	}
 	
+	public Employee[] getArrayOfAllEmployees() {
+		
+		Employee[] employeesArray = employees.toArray(new Employee[employees.size()]);
+		
+		return employeesArray;
+	}
 	
 }
 

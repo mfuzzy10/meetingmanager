@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Menu {
 
 	private MeetingManager manager;
+	Scanner scanner = new Scanner(System.in);
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -26,18 +27,17 @@ public class Menu {
 		System.out.println("6) Cancel Meeting Suggestion Made");
 		System.out.println("7) View Meeting Suggestions Received");
 		System.out.println("8) Respond to Meeting Suggestion Received");
+		System.out.println("9) View All Employees");
 		
 	}
 	
 	public void displayAdminOptions() {
 		displayUserOptions();
-		System.out.println("9) Add Employee");
-		System.out.println("10) Remove Employee");
+		System.out.println("10) Add Employee");
+		System.out.println("11) Remove Employee");
 	}
 	
 	public void runMenu() {
-		
-		Scanner scanner = new Scanner(System.in);
 		
 		while (true) {
 			
@@ -93,9 +93,6 @@ public class Menu {
 					System.out.println("#");
 					System.out.println("###################################################");
 					
-					System.out.println("");
-					System.out.println("Please choose your option: ");
-					System.out.println("");
 				} else {
 					System.out.println("");
 					System.out.println("Wrong login details. Try again.");
@@ -105,6 +102,11 @@ public class Menu {
 			} else {
 				
 				while (manager.getLoggedInEmployee() != null) {
+					
+					System.out.println("");
+					System.out.println("");
+					System.out.println("Please choose your option: ");
+					System.out.println("");
 					
 					if (manager.getLoggedInEmployee().getAccountType() == AccountType.USER) {
 						
@@ -121,92 +123,7 @@ public class Menu {
 					switch (option) {
 					
 					case "1":
-						/* Add Meeting:
-						 * 
-						 * 1) Get meeting info from user
-						 * 2) Attempt to add meeting
-						 * 3) If unsuccessful ask for different time
-						 */
-						System.out.println("Enter meeting details: ");
-						System.out.println("");
-						
-						System.out.println("title:");
-						String title = scanner.nextLine();
-						System.out.println("");
-						
-						System.out.println("description:");
-						String description = scanner.nextLine();
-						System.out.println("");
-						
-						String year;
-						String month;
-						String day;
-						String hour;
-						String minute;
-						
-						System.out.println("");
-						System.out.println("Meeting starts:");
-						System.out.println("");
-						
-						System.out.println("year:");
-						year = scanner.nextLine();
-						System.out.println("");
-						
-						System.out.println("month:");
-						month = scanner.nextLine();
-						System.out.println("");
-						
-						System.out.println("day:");
-						day = scanner.nextLine();
-						System.out.println("");
-						
-						System.out.println("hour:");
-						hour = scanner.nextLine();
-						System.out.println("");
-						
-						System.out.println("minute:");
-						minute = scanner.nextLine();
-						System.out.println("");
-						
-						LocalDateTime startTime = LocalDateTime.parse(""+ year +"-"+ month +"-"+ day +"T"+ hour +":"+ minute + ":00");
-						
-						
-						System.out.println("");
-						System.out.println("Meeting starts:");
-						System.out.println("");
-						
-						System.out.println("year:");
-						year = scanner.nextLine();
-						System.out.println("");
-						
-						System.out.println("month:");
-						month = scanner.nextLine();
-						System.out.println("");
-						
-						System.out.println("day:");
-						day = scanner.nextLine();
-						System.out.println("");
-						
-						System.out.println("hour:");
-						hour = scanner.nextLine();
-						System.out.println("");
-						
-						System.out.println("minute:");
-						minute = scanner.nextLine();
-						System.out.println("");
-						
-						LocalDateTime endTime = LocalDateTime.parse(""+ year +"-"+ month +"-"+ day +"T"+ hour +":"+ minute + ":00");
-						
-						Meeting meetingToAdd = new Meeting(title, description, startTime, endTime);
-						
-						if (manager.addMeeting(meetingToAdd)) {
-							System.out.println("Meeting added!");
-							System.out.println("");
-						} else {
-							System.out.println("Meeting could not be added at the specified time!");
-							System.out.println("");
-						}
-						
+						addMeeting();
 						break;
 						
 					case "2":
@@ -263,13 +180,17 @@ public class Menu {
 						break;
 						
 					case "9":
+						viewAllEmployees();
+						break;
+						
+					case "10":
 						/* Add Employee:
 						 * 
 						 * 
 						 */
 						break;
 						
-					case "10":
+					case "11":
 						/* Remove Employee:
 						 * 
 						 * 
@@ -287,5 +208,103 @@ public class Menu {
 		}
 	}
 	
+	public void addMeeting() {
+		System.out.println("Enter meeting details: ");
+		System.out.println("");
+		
+		System.out.println("title:");
+		String title = scanner.nextLine();
+		System.out.println("");
+		
+		System.out.println("description:");
+		String description = scanner.nextLine();
+		System.out.println("");
+		
+		String year;
+		String month;
+		String day;
+		String hour;
+		String minute;
+		
+		System.out.println("");
+		System.out.println("Meeting starts:");
+		System.out.println("");
+		
+		System.out.println("year:");
+		year = scanner.nextLine();
+		System.out.println("");
+		
+		System.out.println("month:");
+		month = scanner.nextLine();
+		System.out.println("");
+		
+		System.out.println("day:");
+		day = scanner.nextLine();
+		System.out.println("");
+		
+		System.out.println("hour:");
+		hour = scanner.nextLine();
+		System.out.println("");
+		
+		System.out.println("minute:");
+		minute = scanner.nextLine();
+		System.out.println("");
+		
+		LocalDateTime startTime = LocalDateTime.parse(""+ year +"-"+ month +"-"+ day +"T"+ hour +":"+ minute + ":00");
+		
+		
+		System.out.println("");
+		System.out.println("Meeting starts:");
+		System.out.println("");
+		
+		System.out.println("year:");
+		year = scanner.nextLine();
+		System.out.println("");
+		
+		System.out.println("month:");
+		month = scanner.nextLine();
+		System.out.println("");
+		
+		System.out.println("day:");
+		day = scanner.nextLine();
+		System.out.println("");
+		
+		System.out.println("hour:");
+		hour = scanner.nextLine();
+		System.out.println("");
+		
+		System.out.println("minute:");
+		minute = scanner.nextLine();
+		System.out.println("");
+		
+		LocalDateTime endTime = LocalDateTime.parse(""+ year +"-"+ month +"-"+ day +"T"+ hour +":"+ minute + ":00");
+		
+		Meeting meetingToAdd = new Meeting(title, description, startTime, endTime);
+		
+		if (manager.addMeeting(meetingToAdd)) {
+			System.out.println("Meeting added!");
+			System.out.println("");
+		} else {
+			System.out.println("Meeting could not be added at the specified time!");
+			System.out.println("");
+		}
+	}
+	
+	public void viewAllEmployees() {
+		
+		System.out.println("");
+		
+		Employee[] employees = manager.getArrayOfAllEmployees();
+		
+		for (int i = 0; i < employees.length; i++) {
+			
+			System.out.println("# Employee " + (i+1));
+			System.out.println("# First Name: " + employees[i].getFirstName() + "   Last Name: " + employees[i].getLastName());
+			System.out.println("# Department: " + employees[i].getDepartment() + "   Unique Username: " + employees[i].getUniqueUsername());
+			System.out.println("");
+		}
+		
+		System.out.println("");
+	}
 	
 }

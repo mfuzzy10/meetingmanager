@@ -9,12 +9,15 @@ public class Employee {
 	
 	private String firstName;
 	private String lastName;
+	
+	private String department;
+	
 	private String uniqueUsername;
 	private String password;
 	
 	private AccountType accountType;
 	
-	public Employee(String firstName, String lastName, String uniqueUsername, String password, AccountType accountType) {
+	public Employee(String firstName, String lastName, String uniqueUsername, String password, String department, AccountType accountType) {
 		this.diary = new LinkedList<Meeting>();
 		this.meetingSuggestionsReceived = new LinkedList<MeetingSuggestion>();
 		this.meetingSuggestionsMade = new LinkedList<MeetingSuggestionMade>();
@@ -22,6 +25,9 @@ public class Employee {
 		
 		this.firstName = firstName;
 		this.lastName = lastName;
+		
+		this.department = department;
+		
 		this.uniqueUsername = uniqueUsername;
 		this.password = password;
 		
@@ -152,6 +158,20 @@ public class Employee {
 	 */
 	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
+	}
+
+	/**
+	 * @return the department
+	 */
+	public String getDepartment() {
+		return department;
+	}
+
+	/**
+	 * @param department the department to set
+	 */
+	public void setDepartment(String department) {
+		this.department = department;
 	}
 	
 	
