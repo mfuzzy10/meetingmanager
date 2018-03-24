@@ -10,18 +10,20 @@ public class Employee {
 	private String firstName;
 	private String lastName;
 	private String uniqueUsername;
+	private String password;
 	
 	private AccountType accountType;
 	
-	public Employee(String firstName, String lastName, String uniqueUsername, AccountType accountType) {
-		this.diary = null;
-		this.meetingSuggestionsReceived = null;
-		this.meetingSuggestionsMade = null;
-		this.notifications = null;
+	public Employee(String firstName, String lastName, String uniqueUsername, String password, AccountType accountType) {
+		this.diary = new LinkedList<Meeting>();
+		this.meetingSuggestionsReceived = new LinkedList<MeetingSuggestion>();
+		this.meetingSuggestionsMade = new LinkedList<MeetingSuggestionMade>();
+		this.notifications = new LinkedList<Notification>();
 		
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.uniqueUsername = uniqueUsername;
+		this.password = password;
 		
 		this.accountType = accountType;
 	}
@@ -122,6 +124,20 @@ public class Employee {
 	 */
 	public void setUniqueUsername(String uniqueUsername) {
 		this.uniqueUsername = uniqueUsername;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	/**

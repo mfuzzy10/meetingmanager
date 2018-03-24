@@ -3,11 +3,33 @@ import java.util.LinkedList;
 public class MeetingManager {
 
 	private Employee loggedInEmployee;
-	private LinkedList employees;
+	private LinkedList<Employee> employees;
 	
 	public MeetingManager() {
 		loggedInEmployee = null;
-		employees = null;
+		employees = new LinkedList<Employee>();
+		Employee admin = new Employee("admin", "admin", "admin", "admin", AccountType.ADMIN);
+		employees.add(admin);
+	}
+	
+	/**
+	 * @param username
+	 * @return true: logged in successfully; false: not logged in successfully (i.e. details don't match)
+	 */
+	public boolean logIn(String username, String password) {
+		for (Employee employee : employees) {
+			if (username.equals(employee.getUniqueUsername())) {
+				if (password.equals(employee.getPassword())) {
+					loggedInEmployee = employee;
+					return true;
+				} else {
+					return false;
+				}
+				
+			}
+		}
+			
+		return false;
 	}
 	
 	/**
@@ -130,8 +152,8 @@ public class MeetingManager {
 	public boolean loadMeetingData() {
 		return false;
 	}
-	
-		/**
+
+	/**
 	 * @return the loggedInEmployee
 	 */
 	public Employee getLoggedInEmployee() {
@@ -158,6 +180,8 @@ public class MeetingManager {
 	public void setEmployees(LinkedList employees) {
 		this.employees = employees;
 	}
+	
+	
 }
 
 
