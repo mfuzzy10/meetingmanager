@@ -3,6 +3,13 @@ public class MeetingSuggestionMade {
 	private Meeting meetingDetails;
 	private Employee[] suggestedTo;
 	
+	
+	
+	public MeetingSuggestionMade(Meeting meetingDetails, Employee[] suggestedTo) {
+		this.meetingDetails = meetingDetails;
+		this.suggestedTo = suggestedTo;
+	}
+	
 	/**
 	 * @return the meetingDetails
 	 */

@@ -5,6 +5,13 @@ public class Notification {
 	private String title;
 	private String content;
 	
+	public Notification(Employee from, String title, String content) {
+		super();
+		this.from = from;
+		this.title = title;
+		this.content = content;
+	}
+	
 	/**
 	 * @return the from
 	 */

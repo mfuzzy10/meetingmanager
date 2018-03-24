@@ -4,6 +4,11 @@ public class MeetingSuggestion {
 	private Meeting meetingDetails;
 	private Employee suggestedBy;
 	
+	public MeetingSuggestion(Meeting meetingDetails, Employee suggestedBy) {
+		this.meetingDetails = meetingDetails;
+		this.suggestedBy = suggestedBy;
+	}
+	
 	/**
 	 * @return the meetingDetails
 	 */

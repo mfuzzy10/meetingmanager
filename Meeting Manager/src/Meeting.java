@@ -9,6 +9,14 @@ public class Meeting {
 	private LocalTime startTime;
 	private LocalTime endTime;
 	
+	public Meeting(String title, String description, LocalDate date, LocalTime startTime, LocalTime endTime) {
+		this.title = title;
+		this.description = description;
+		this.date = date;
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+	
 	/**
 	 * @return the title
 	 */

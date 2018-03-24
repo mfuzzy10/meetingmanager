@@ -12,6 +12,19 @@ public class Employee {
 	private String uniqueUsername;
 	
 	private AccountType accountType;
+	
+	public Employee(String firstName, String lastName, String uniqueUsername, AccountType accountType) {
+		this.diary = null;
+		this.meetingSuggestionsReceived = null;
+		this.meetingSuggestionsMade = null;
+		this.notifications = null;
+		
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.uniqueUsername = uniqueUsername;
+		
+		this.accountType = accountType;
+	}
 
 	/**
 	 * @return the diary

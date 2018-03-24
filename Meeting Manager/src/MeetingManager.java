@@ -2,12 +2,13 @@ import java.util.LinkedList;
 
 public class MeetingManager {
 
-	public static void main(String[] args) {
-
-	}
-
 	private Employee loggedInEmployee;
 	private LinkedList employees;
+	
+	public MeetingManager() {
+		loggedInEmployee = null;
+		employees = null;
+	}
 	
 	/**
 	 * This method adds the Meeting passed in by reference to
@@ -20,7 +21,6 @@ public class MeetingManager {
 	public boolean addMeeting(Meeting meetingToAdd) {
 		if (meetingCanBeAdded(meetingToAdd)) {
 			loggedInEmployee.getDiary().add(meetingToAdd);
-			return true;
 		}
 		
 		return false;
