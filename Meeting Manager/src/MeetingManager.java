@@ -130,6 +130,34 @@ public class MeetingManager {
 	public boolean loadMeetingData() {
 		return false;
 	}
+	
+		/**
+	 * @return the loggedInEmployee
+	 */
+	public Employee getLoggedInEmployee() {
+		return loggedInEmployee;
+	}
+
+	/**
+	 * @param loggedInEmployee the loggedInEmployee to set
+	 */
+	public void setLoggedInEmployee(Employee loggedInEmployee) {
+		this.loggedInEmployee = loggedInEmployee;
+	}
+
+	/**
+	 * @return the employees
+	 */
+	public LinkedList getEmployees() {
+		return employees;
+	}
+
+	/**
+	 * @param employees the employees to set
+	 */
+	public void setEmployees(LinkedList employees) {
+		this.employees = employees;
+	}
 }
 
 
