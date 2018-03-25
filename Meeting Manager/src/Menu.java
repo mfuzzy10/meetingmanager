@@ -411,10 +411,14 @@ public class Menu {
 			Meeting meetingDetails = meetingSuggestion[i].getMeetingDetails();
 			LocalDateTime startTime = meetingDetails.getStartTime();
 			LocalDateTime endTime = meetingDetails.getEndTime();
+			Employee suggestedBy = meetingSuggestion[i].getSuggestedBy();
 			
 			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
 			System.out.println("# Meeting Start: " + startTime.getYear() + "/" + startTime.getMonthValue() + "/" + startTime.getDayOfMonth() + " @ " + startTime.getHour() + ":" + startTime.getMinute());
 			System.out.println("# Meeting End: " + endTime.getYear() + "/" + endTime.getMonthValue() + "/" + endTime.getDayOfMonth() + " @ " + endTime.getHour() + ":" + endTime.getMinute());
+			System.out.println("#");
+			System.out.println("# Suggested By: ");
+			System.out.println("# First Name: " + suggestedBy.getFirstName() + "   Last Name: " + suggestedBy.getLastName() + "   Department: " + suggestedBy.getDepartment() + "   Unique Username: " + suggestedBy.getUniqueUsername());
 			System.out.println("");
 		}
 		
@@ -425,17 +429,23 @@ public class Menu {
 		
 		System.out.println("");
 		
-		MeetingSuggestion[] meetingSuggestion = manager.getArrayOfMeetingSuggestionsMade();
+		MeetingSuggestionMade[] meetingSuggestion = manager.getArrayOfMeetingSuggestionsMade();
 		
 		for (int i = 0; i < meetingSuggestion.length; i++) {
 			
 			Meeting meetingDetails = meetingSuggestion[i].getMeetingDetails();
 			LocalDateTime startTime = meetingDetails.getStartTime();
 			LocalDateTime endTime = meetingDetails.getEndTime();
+			Employee[] suggestedTo = meetingSuggestion[i].getSuggestedTo();
 			
 			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
 			System.out.println("# Meeting Start: " + startTime.getYear() + "/" + startTime.getMonthValue() + "/" + startTime.getDayOfMonth() + " @ " + startTime.getHour() + ":" + startTime.getMinute());
 			System.out.println("# Meeting End: " + endTime.getYear() + "/" + endTime.getMonthValue() + "/" + endTime.getDayOfMonth() + " @ " + endTime.getHour() + ":" + endTime.getMinute());
+			System.out.println("#");
+			System.out.println("# Suggested To: ");
+			for (Employee employee : suggestedTo) {
+				System.out.println("# First Name: " + employee.getFirstName() + "   Last Name: " + employee.getLastName() + "   Department: " + employee.getDepartment() + "   Unique Username: " + employee.getUniqueUsername());
+			}
 			System.out.println("");
 		}
 		

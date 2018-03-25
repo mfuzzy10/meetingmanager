@@ -11,7 +11,7 @@ public class MeetingManager {
 		loggedInEmployee = null;
 		employees = new LinkedList<Employee>();
 		Employee admin = new Employee("admin", "admin", "admin", "admin", "Computing", AccountType.ADMIN);
-		Employee roman = new Employee("Roman", "Bridskiy", "romanbridskiy",  "admin", "Computing", AccountType.ADMIN);
+		Employee roman = new Employee("Roman", "Brodskiy", "romanbrodskiy",  "admin", "Computing", AccountType.ADMIN);
 		Employee matt = new Employee("Matt", "Robb", "mattrobb", "admin", "Computing", AccountType.ADMIN);
 		Employee archie = new Employee("Archie", "Chalmers", "archiechalmers", "admin", "Computing", AccountType.ADMIN);
 		Employee oskar = new Employee("Oskar", "Jankowski", "oskarjankowski", "admin", "Computing", AccountType.ADMIN);
@@ -248,9 +248,9 @@ public class MeetingManager {
 	/**
 	 * @return array of references of all MeetingSuggestions Made by loggedInEmployee 
 	 */
-	public MeetingSuggestion[] getArrayOfMeetingSuggestionsMade() {
+	public MeetingSuggestionMade[] getArrayOfMeetingSuggestionsMade() {
 		
-		MeetingSuggestion[] meetingSuggestionsMadeArray = loggedInEmployee.getMeetingSuggestionsMade().toArray(new MeetingSuggestion[loggedInEmployee.getMeetingSuggestionsMade().size()]);
+		MeetingSuggestionMade[] meetingSuggestionsMadeArray = loggedInEmployee.getMeetingSuggestionsMade().toArray(new MeetingSuggestionMade[loggedInEmployee.getMeetingSuggestionsMade().size()]);
 		
 		return meetingSuggestionsMadeArray;
 		
