@@ -22,21 +22,22 @@ public class Menu {
 	public void displayUserOptions() {
 		
 		System.out.println("1) Add Meeting");
-		System.out.println("2) Delete Meeting");
-		System.out.println("3) Suggest Meeting");
-		System.out.println("4) Availability Search");
-		System.out.println("5) View Meeting Suggestions Made");
-		System.out.println("6) Cancel Meeting Suggestion Made");
-		System.out.println("7) View Meeting Suggestions Received");
-		System.out.println("8) Respond to Meeting Suggestion Received");
-		System.out.println("9) View All Employees");
+		System.out.println("2) View Meetings");
+		System.out.println("3) Delete Meeting");
+		System.out.println("4) Suggest Meeting");
+		System.out.println("5) Availability Search");
+		System.out.println("6) View Meeting Suggestions Made");
+		System.out.println("7) Cancel Meeting Suggestion Made");
+		System.out.println("8) View Meeting Suggestions Received");
+		System.out.println("9) Respond to Meeting Suggestion Received");
+		System.out.println("10) View All Employees");
 		
 	}
 	
 	public void displayAdminOptions() {
 		displayUserOptions();
-		System.out.println("10) Add Employee");
-		System.out.println("11) Remove Employee");
+		System.out.println("11) Add Employee");
+		System.out.println("12) Remove Employee");
 	}
 	
 	public void runMenu() {
@@ -127,12 +128,16 @@ public class Menu {
 					case "1":
 						addMeeting();
 						break;
-						
+					
 					case "2":
-						deleteMeeting();
+						viewAllMeetings();
 						break;
 						
 					case "3":
+						deleteMeeting();
+						break;
+						
+					case "4":
 						/* Suggest Meeting:
 						 * 
 						 * 1) Get meeting details from user
@@ -142,51 +147,47 @@ public class Menu {
 						 */
 						break;
 						
-					case "4":
+					case "5":
 						/* Availability Search:
 						 * 
 						 * 
 						 */
 						break;
 						
-					case "5":
+					case "6":
 						viewAllMeetingSuggestionsMade();
 						break;
 						
-					case "6":
+					case "7":
 						/* Cancel Meeting Suggestion Made:
 						 * 
-						 * 1) Display all meeting suggestions made in number list
-						 * 2) Ask user for number of meeting suggestion they want to cancel
-						 * 3) Remove the meeting suggestion from the employees to which the suggestion was sent to
-						 * 4) If they have already accepted the suggestion, delete it from their diary
 						 * 
 						 */
 						break;
 						
-					case "7":
+					case "8":
 						viewAllMeetingSuggestionsReceived();
 						break;
 						
-					case "8":
+					case "9":
 						/* Respond to Meeting Suggestion Received:
 						 * 
 						 * 
 						 */
 						break;
 						
-					case "9":
+					case "10":
 						viewAllEmployees();
 						break;
 						
-					case "10":
+					case "11":
 						/* Add Employee:
 						 * 
 						 * 
 						 */
 						break;
 						
-					case "11":
+					case "12":
 						/* Remove Employee:
 						 * 
 						 * 
