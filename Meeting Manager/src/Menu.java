@@ -160,6 +160,10 @@ public class Menu {
 					case "6":
 						/* Cancel Meeting Suggestion Made:
 						 * 
+						 * 1) Display all meeting suggestions made in number list
+						 * 2) Ask user for number of meeting suggestion they want to cancel
+						 * 3) Remove the meeting suggestion from the employees to which the suggestion was sent to
+						 * 4) If they have already accepted the suggestion, delete it from their diary
 						 * 
 						 */
 						break;
@@ -452,4 +456,15 @@ public class Menu {
 		System.out.println("");
 	}
 	
+	/*
+	 * 1) S
+	 */
+	public void availabilitySearch() {
+		
+		System.out.println("Enter ");
+		
+	}
+	
 }
+
+	
