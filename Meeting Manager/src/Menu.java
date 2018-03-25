@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Menu {
 
+	private final int CURRENT_YEAR;
 	private MeetingManager manager;
 	Scanner scanner = new Scanner(System.in);
 	
@@ -14,6 +15,7 @@ public class Menu {
 	}
 
 	public Menu() {
+		CURRENT_YEAR = 2018;
 		manager = new MeetingManager();
 	}
 	
@@ -213,71 +215,30 @@ public class Menu {
 		System.out.println("");
 		
 		System.out.println("title:");
-		String title = scanner.nextLine();
+		String title = UserInput.inputString();
 		System.out.println("");
 		
 		System.out.println("description:");
-		String description = scanner.nextLine();
+		String description = UserInput.inputString();
 		System.out.println("");
 		
-		String year;
-		String month;
-		String day;
-		String hour;
-		String minute;
-		
-		System.out.println("");
-		System.out.println("Meeting starts:");
-		System.out.println("");
-		
-		System.out.println("year:");
-		year = scanner.nextLine();
-		System.out.println("");
-		
-		System.out.println("month:");
-		month = scanner.nextLine();
-		System.out.println("");
-		
-		System.out.println("day:");
-		day = scanner.nextLine();
-		System.out.println("");
-		
-		System.out.println("hour:");
-		hour = scanner.nextLine();
-		System.out.println("");
-		
-		System.out.println("minute:");
-		minute = scanner.nextLine();
-		System.out.println("");
-		
-		LocalDateTime startTime = LocalDateTime.parse(""+ year +"-"+ month +"-"+ day +"T"+ hour +":"+ minute + ":00");
-		
+		String year = null;
+		String month = null;
+		String day = null;
+		String hour = null;
+		String minute = null;
 		
 		System.out.println("");
 		System.out.println("Meeting starts:");
 		System.out.println("");
+
+		LocalDateTime startTime = getMeetingDateAndTimeInputFromUser();
 		
-		System.out.println("year:");
-		year = scanner.nextLine();
+		System.out.println("");
+		System.out.println("Meeting ends:");
 		System.out.println("");
 		
-		System.out.println("month:");
-		month = scanner.nextLine();
-		System.out.println("");
-		
-		System.out.println("day:");
-		day = scanner.nextLine();
-		System.out.println("");
-		
-		System.out.println("hour:");
-		hour = scanner.nextLine();
-		System.out.println("");
-		
-		System.out.println("minute:");
-		minute = scanner.nextLine();
-		System.out.println("");
-		
-		LocalDateTime endTime = LocalDateTime.parse(""+ year +"-"+ month +"-"+ day +"T"+ hour +":"+ minute + ":00");
+		LocalDateTime endTime = getMeetingDateAndTimeInputFromUser();
 		
 		Meeting meetingToAdd = new Meeting(title, description, startTime, endTime);
 		
@@ -288,6 +249,130 @@ public class Menu {
 			System.out.println("Meeting could not be added at the specified time!");
 			System.out.println("");
 		}
+	}
+	
+	public LocalDateTime getMeetingDateAndTimeInputFromUser() {
+
+		String year = null;
+		String month = null;
+		String day = null;
+		String hour = null;
+		String minute = null;
+		
+		boolean validInput = false;
+		
+		do {
+			System.out.println("year (YYYY):");
+			int intYear = UserInput.inputInt();
+			System.out.println("");
+			
+			if (intYear != -1) {
+				if (intYear >= CURRENT_YEAR && intYear < 9999) {
+					year = Integer.toString(intYear);
+					validInput = true;
+				} else {
+					System.out.println("Year must be " + CURRENT_YEAR + " or later");
+				}
+			} else {
+				System.out.println("You must enter an integer");
+			}
+		} while (validInput == false);
+		
+		validInput = false;
+		
+		do {
+			System.out.println("month (MM):");
+			int intMonth = UserInput.inputInt();
+			System.out.println("");
+			
+			if (intMonth != -1) {
+				if (intMonth > 0 && intMonth < 13) {
+					if (intMonth < 10) {
+						month = "0" + Integer.toString(intMonth);
+					} else {
+						month = Integer.toString(intMonth);
+					}
+					validInput = true;
+				} else {
+					System.out.println("Month must be between 1 (January) and 12 (December)");
+				}
+			} else  {
+				System.out.println("You must enter an integer");
+			}
+		} while (validInput == false);
+		
+		validInput = false;
+		
+		do {
+			System.out.println("day (DD):");
+			int intDay = UserInput.inputInt();
+			System.out.println("");
+			
+			if (intDay != -1) {
+				if (intDay > 0 && intDay < 30) {
+					if (intDay < 10) {
+						day = "0" + Integer.toString(intDay);
+					} else {
+						day = Integer.toString(intDay);
+					}
+					validInput = true;
+				} else {
+					System.out.println("Day must be between 1 and the number of days in the month you entered");
+				}
+			} else  {
+				System.out.println("You must enter an integer");
+			}
+		} while (validInput == false);
+		
+		validInput = false;
+		
+		do {
+			System.out.println("hour (HH):");
+			int intHour = UserInput.inputInt();
+			System.out.println("");
+			
+			if (intHour != -1) {
+				if (intHour > -1 && intHour < 25) {
+					if (intHour < 10) {
+						hour = "0" + Integer.toString(intHour);
+					} else {
+						hour = Integer.toString(intHour);
+					}
+					validInput = true;
+				} else {
+					System.out.println("Hour must be between 0 and 24");
+				}
+			} else  {
+				System.out.println("You must enter an integer");
+			}
+		} while (validInput == false);
+		
+		validInput = false;
+		
+		do {
+			System.out.println("minute (MM):");
+			int intMinute = UserInput.inputInt();
+			System.out.println("");
+			
+			if (intMinute != -1) {
+				if (intMinute > -1 && intMinute < 60) {
+					if (intMinute < 10) {
+						minute = "0" + Integer.toString(intMinute);
+					} else {
+						minute = Integer.toString(intMinute);
+					}
+					validInput = true;
+				} else {
+					System.out.println("Minute must be between 0 and 59");
+				}
+			} else  {
+				System.out.println("You must enter an integer");
+			}
+		} while (validInput == false);
+		
+		LocalDateTime localDateTime = LocalDateTime.parse(""+ year +"-"+ month +"-"+ day +"T"+ hour +":"+ minute + ":00");
+		
+		return localDateTime;
 	}
 	
 	public void viewAllEmployees() {

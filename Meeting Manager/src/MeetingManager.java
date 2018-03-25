@@ -110,6 +110,20 @@ public class MeetingManager {
 	 */
 	public void suggestMeeting(Meeting meetingToSuggest, Employee[] suggestTo, Employee suggestedBy) {
 		
+		//Create MeetingSuggestion with the Meeting passed in by reference to send to the array of Employee references passed in
+		MeetingSuggestion meetingSuggestion = new MeetingSuggestion(meetingToSuggest, suggestedBy);
+		
+		//Send the MeetingSuggestion created to each Employee in the array of Employees passed in
+		for (Employee employee: suggestTo) {
+			employee.getMeetingSuggestionsReceived().add(meetingSuggestion);
+		}
+		
+		//Create MeetingSuggestionMade type instance with Meeting passed in by reference and array of Employee references it was sent to
+		MeetingSuggestionMade meetingSuggestionMade = new MeetingSuggestionMade(meetingToSuggest, suggestTo);
+		
+		//Add the MeetingSuggestionMade type created to the LinkedList of meeting suggestions made 
+		loggedInEmployee.getMeetingSuggestionsMade().add(meetingSuggestionMade);
+		
 	}
 	
 	/**
