@@ -22,21 +22,22 @@ public class Menu {
 	public void displayUserOptions() {
 		
 		System.out.println("1) Add Meeting");
-		System.out.println("2) Delete Meeting");
-		System.out.println("3) Suggest Meeting");
-		System.out.println("4) Availability Search");
-		System.out.println("5) View Meeting Suggestions Made");
-		System.out.println("6) Cancel Meeting Suggestion Made");
-		System.out.println("7) View Meeting Suggestions Received");
-		System.out.println("8) Respond to Meeting Suggestion Received");
-		System.out.println("9) View All Employees");
+		System.out.println("2) View Meetings");
+		System.out.println("3) Delete Meeting");
+		System.out.println("4) Suggest Meeting");
+		System.out.println("5) Availability Search");
+		System.out.println("6) View Meeting Suggestions Made");
+		System.out.println("7) Cancel Meeting Suggestion Made");
+		System.out.println("8) View Meeting Suggestions Received");
+		System.out.println("9) Respond to Meeting Suggestion Received");
+		System.out.println("10) View All Employees");
 		
 	}
 	
 	public void displayAdminOptions() {
 		displayUserOptions();
-		System.out.println("10) Add Employee");
-		System.out.println("11) Remove Employee");
+		System.out.println("11) Add Employee");
+		System.out.println("12) Remove Employee");
 	}
 	
 	public void runMenu() {
@@ -127,8 +128,12 @@ public class Menu {
 					case "1":
 						addMeeting();
 						break;
-						
+					
 					case "2":
+						viewAllMeetings();
+						break;
+						
+					case "3":
 						/* Delete Meeting:
 						 * 
 						 * 1) List users meeting in a numbered list
@@ -136,7 +141,7 @@ public class Menu {
 						 */
 						break;
 						
-					case "3":
+					case "4":
 						/* Suggest Meeting:
 						 * 
 						 * 1) Get meeting details from user
@@ -146,51 +151,47 @@ public class Menu {
 						 */
 						break;
 						
-					case "4":
+					case "5":
 						/* Availability Search:
 						 * 
 						 * 
 						 */
 						break;
 						
-					case "5":
+					case "6":
 						viewAllMeetingSuggestionsMade();
 						break;
 						
-					case "6":
+					case "7":
 						/* Cancel Meeting Suggestion Made:
 						 * 
-						 * 1) Display all meeting suggestions made in number list
-						 * 2) Ask user for number of meeting suggestion they want to cancel
-						 * 3) Remove the meeting suggestion from the employees to which the suggestion was sent to
-						 * 4) If they have already accepted the suggestion, delete it from their diary
 						 * 
 						 */
 						break;
 						
-					case "7":
+					case "8":
 						viewAllMeetingSuggestionsReceived();
 						break;
 						
-					case "8":
+					case "9":
 						/* Respond to Meeting Suggestion Received:
 						 * 
 						 * 
 						 */
 						break;
 						
-					case "9":
+					case "10":
 						viewAllEmployees();
 						break;
 						
-					case "10":
+					case "11":
 						/* Add Employee:
 						 * 
 						 * 
 						 */
 						break;
 						
-					case "11":
+					case "12":
 						/* Remove Employee:
 						 * 
 						 * 
@@ -261,6 +262,54 @@ public class Menu {
 			System.out.println("Meeting could not be added at the specified time!");
 			System.out.println("");
 		}
+	}
+	
+	public void viewAllMeetings() {
+		System.out.println("");
+		
+		String title;
+		LocalDateTime startTime;
+		LocalDateTime endTime;
+		String description;
+		
+		for(int i = 0; i < manager.getLoggedInEmployee().getDiary().size(); i++) {
+			
+			title = manager.getLoggedInEmployee().getDiary().get(i).getTitle();
+			startTime = manager.getLoggedInEmployee().getDiary().get(i).getStartTime();
+			endTime = manager.getLoggedInEmployee().getDiary().get(i).getEndTime();
+			description = manager.getLoggedInEmployee().getDiary().get(i).getDescription();
+			
+			System.out.println("# " + title);
+			System.out.println("# " + getGoodDate(startTime) + " - " + getGoodDate(endTime));
+			System.out.println("# " + description);
+			System.out.println("");
+			
+		}
+		System.out.println("");
+	}
+	
+	public String getGoodDate(LocalDateTime dateTime) {
+		String day = Integer.toString(dateTime.getDayOfMonth());
+		String month = Integer.toString(dateTime.getMonthValue());
+		String year = Integer.toString(dateTime.getYear());
+		String hour = Integer.toString(dateTime.getHour());
+		String minute = Integer.toString(dateTime.getMinute());
+
+		if(Integer.parseInt(day) < 10) {
+			day = "0" + day;
+		}
+		if(Integer.parseInt(month) < 10) {
+			month = "0" + month;
+		} 
+		if(Integer.parseInt(hour) < 10) {
+			hour = "0" + hour;
+		} 
+		if(Integer.parseInt(minute) < 10) {
+			minute = "0" + minute;
+		}
+		
+		String goodDate = hour + ":" + minute + " - " + day + "/" + month + "/" + year;
+		return goodDate;
 	}
 	
 	public LocalDateTime getMeetingDateAndTimeInputFromUser() {
@@ -415,14 +464,10 @@ public class Menu {
 			Meeting meetingDetails = meetingSuggestion[i].getMeetingDetails();
 			LocalDateTime startTime = meetingDetails.getStartTime();
 			LocalDateTime endTime = meetingDetails.getEndTime();
-			Employee suggestedBy = meetingSuggestion[i].getSuggestedBy();
 			
 			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
 			System.out.println("# Meeting Start: " + startTime.getYear() + "/" + startTime.getMonthValue() + "/" + startTime.getDayOfMonth() + " @ " + startTime.getHour() + ":" + startTime.getMinute());
 			System.out.println("# Meeting End: " + endTime.getYear() + "/" + endTime.getMonthValue() + "/" + endTime.getDayOfMonth() + " @ " + endTime.getHour() + ":" + endTime.getMinute());
-			System.out.println("#");
-			System.out.println("# Suggested By: ");
-			System.out.println("# First Name: " + suggestedBy.getFirstName() + "   Last Name: " + suggestedBy.getLastName() + "   Department: " + suggestedBy.getDepartment() + "   Unique Username: " + suggestedBy.getUniqueUsername());
 			System.out.println("");
 		}
 		
@@ -433,38 +478,21 @@ public class Menu {
 		
 		System.out.println("");
 		
-		MeetingSuggestionMade[] meetingSuggestion = manager.getArrayOfMeetingSuggestionsMade();
+		MeetingSuggestion[] meetingSuggestion = manager.getArrayOfMeetingSuggestionsMade();
 		
 		for (int i = 0; i < meetingSuggestion.length; i++) {
 			
 			Meeting meetingDetails = meetingSuggestion[i].getMeetingDetails();
 			LocalDateTime startTime = meetingDetails.getStartTime();
 			LocalDateTime endTime = meetingDetails.getEndTime();
-			Employee[] suggestedTo = meetingSuggestion[i].getSuggestedTo();
 			
 			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
 			System.out.println("# Meeting Start: " + startTime.getYear() + "/" + startTime.getMonthValue() + "/" + startTime.getDayOfMonth() + " @ " + startTime.getHour() + ":" + startTime.getMinute());
 			System.out.println("# Meeting End: " + endTime.getYear() + "/" + endTime.getMonthValue() + "/" + endTime.getDayOfMonth() + " @ " + endTime.getHour() + ":" + endTime.getMinute());
-			System.out.println("#");
-			System.out.println("# Suggested To: ");
-			for (Employee employee : suggestedTo) {
-				System.out.println("# First Name: " + employee.getFirstName() + "   Last Name: " + employee.getLastName() + "   Department: " + employee.getDepartment() + "   Unique Username: " + employee.getUniqueUsername());
-			}
 			System.out.println("");
 		}
 		
 		System.out.println("");
 	}
 	
-	/*
-	 * 1) S
-	 */
-	public void availabilitySearch() {
-		
-		System.out.println("Enter ");
-		
-	}
-	
 }
-
-	

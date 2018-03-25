@@ -248,39 +248,12 @@ public class MeetingManager {
 	/**
 	 * @return array of references of all MeetingSuggestions Made by loggedInEmployee 
 	 */
-	public MeetingSuggestionMade[] getArrayOfMeetingSuggestionsMade() {
+	public MeetingSuggestion[] getArrayOfMeetingSuggestionsMade() {
 		
-		MeetingSuggestionMade[] meetingSuggestionsMadeArray = loggedInEmployee.getMeetingSuggestionsMade().toArray(new MeetingSuggestionMade[loggedInEmployee.getMeetingSuggestionsMade().size()]);
+		MeetingSuggestion[] meetingSuggestionsMadeArray = loggedInEmployee.getMeetingSuggestionsMade().toArray(new MeetingSuggestion[loggedInEmployee.getMeetingSuggestionsMade().size()]);
 		
 		return meetingSuggestionsMadeArray;
 		
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
