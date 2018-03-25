@@ -155,7 +155,7 @@ public class Menu {
 						break;
 						
 					case "6":
-						viewAllMeetingSuggestionsMade();
+//						viewAllMeetingSuggestionsMade();
 						break;
 						
 					case "7":
@@ -181,17 +181,15 @@ public class Menu {
 						break;
 						
 					case "11":
-						/* Add Employee:
-						 * 
-						 * 
-						 */
+						if(manager.getLoggedInEmployee().getAccountType() == AccountType.ADMIN) {
+							addEmployee();
+						}
 						break;
 						
 					case "12":
-						/* Remove Employee:
-						 * 
-						 * 
-						 */
+						if(manager.getLoggedInEmployee().getAccountType() == AccountType.ADMIN) {
+							removeEmployee();
+						}
 						break;
 						
 					default:
