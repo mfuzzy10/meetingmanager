@@ -220,12 +220,6 @@ public class Menu {
 		String description = UserInput.inputString();
 		System.out.println("");
 		
-		String year = null;
-		String month = null;
-		String day = null;
-		String hour = null;
-		String minute = null;
-		
 		System.out.println("");
 		System.out.println("Meeting starts:");
 		System.out.println("");
