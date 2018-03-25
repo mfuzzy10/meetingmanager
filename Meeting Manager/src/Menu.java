@@ -524,6 +524,44 @@ public class Menu {
 		return goodDate;
 	}
 	
+	public void addEmployee() {
+		System.out.println("");
+		if(manager.getLoggedInEmployee().getAccountType() == AccountType.ADMIN) {
+			String firstName = null;
+			String lastName = null;
+			String username = null;
+			String password = null;
+			String department = null;
+			AccountType accountType = null;
+			
+			System.out.println("first name: ");	
+			firstName = UserInput.inputString();
+			System.out.println("last name");	
+			lastName = UserInput.inputString();
+			System.out.println("username");	
+			username = UserInput.inputString();
+			System.out.println("password");	
+			password = UserInput.inputString();
+			System.out.println("department");	
+			department = UserInput.inputString();
+			
+			System.out.println("account type 1) user  2) admin");	
+			int accountTypeInt = UserInput.inputInt();
+			if(accountTypeInt == 1) {
+				accountType = AccountType.USER;
+			} else if(accountTypeInt == 2) {
+				accountType = AccountType.ADMIN;
+			}
+			
+			Employee newEmployee = new Employee(firstName, lastName, username, password, department, accountType);
+			manager.getEmployees().add(newEmployee);
+		}
+		else {
+			System.out.println("Requires admin account");
+		}
+		System.out.println("");		
+	}
+	
 	public void removeEmployee() {
 		System.out.println("");
 		if(!manager.getEmployees().isEmpty()) {
