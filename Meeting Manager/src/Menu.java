@@ -519,6 +519,25 @@ public class Menu {
 		String goodDate = hour + ":" + minute + " - " + day + "/" + month + "/" + year;
 		return goodDate;
 	}
+	
+	public void removeEmployee() {
+		System.out.println("");
+		if(!manager.getEmployees().isEmpty()) {
+			if(manager.getLoggedInEmployee().getAccountType() == AccountType.ADMIN) {
+				viewAllEmployees();
+				System.out.println("Choose an employee you would like to delete");
+				int employeeIndex = UserInput.inputInt() - 1;
+				boolean employeeToDelete = manager.getEmployees().remove(manager.getEmployees().get(employeeIndex));
+			}
+			else {
+				System.out.println("Requires admin account");
+			}
+		}
+		else {
+			System.out.println("There are no employees");
+		}
+		System.out.println("");
+	}
 }
 
 	
