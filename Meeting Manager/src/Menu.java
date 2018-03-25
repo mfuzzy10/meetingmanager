@@ -466,8 +466,8 @@ public class Menu {
 			LocalDateTime endTime = meetingDetails.getEndTime();
 			
 			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
-			System.out.println("# Meeting Start: " + startTime.getYear() + "/" + startTime.getMonthValue() + "/" + startTime.getDayOfMonth() + " @ " + startTime.getHour() + ":" + startTime.getMinute());
-			System.out.println("# Meeting End: " + endTime.getYear() + "/" + endTime.getMonthValue() + "/" + endTime.getDayOfMonth() + " @ " + endTime.getHour() + ":" + endTime.getMinute());
+			System.out.println("# Meeting Start: " + getGoodDate(startTime));
+			System.out.println("# Meeting End: " + getGoodDate(endTime));
 			System.out.println("");
 		}
 		
@@ -487,8 +487,8 @@ public class Menu {
 			LocalDateTime endTime = meetingDetails.getEndTime();
 			
 			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
-			System.out.println("# Meeting Start: " + startTime.getYear() + "/" + startTime.getMonthValue() + "/" + startTime.getDayOfMonth() + " @ " + startTime.getHour() + ":" + startTime.getMinute());
-			System.out.println("# Meeting End: " + endTime.getYear() + "/" + endTime.getMonthValue() + "/" + endTime.getDayOfMonth() + " @ " + endTime.getHour() + ":" + endTime.getMinute());
+			System.out.println("# Meeting Start: " + getGoodDate(startTime));
+			System.out.println("# Meeting End: " + getGoodDate(endTime));
 			System.out.println("");
 		}
 		
