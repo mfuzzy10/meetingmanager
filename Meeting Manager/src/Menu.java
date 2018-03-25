@@ -21,6 +21,7 @@ public class Menu {
 	
 	public void displayUserOptions() {
 		
+		System.out.println("0) Log out");
 		System.out.println("1) Add Meeting");
 		System.out.println("2) View Meetings");
 		System.out.println("3) Delete Meeting");
@@ -124,7 +125,11 @@ public class Menu {
 					String option = scanner.nextLine();
 					
 					switch (option) {
-					
+							
+					case "0":
+						manager.setLoggedInEmployee(null);
+						break;	
+							
 					case "1":
 						addMeeting();
 						break;
