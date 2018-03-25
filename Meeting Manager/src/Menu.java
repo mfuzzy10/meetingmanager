@@ -129,11 +129,7 @@ public class Menu {
 						break;
 						
 					case "2":
-						/* Delete Meeting:
-						 * 
-						 * 1) List users meeting in a numbered list
-						 * 2) Ask user to enter number of the meeting they want to delete
-						 */
+						deleteMeeting();
 						break;
 						
 					case "3":
@@ -261,6 +257,15 @@ public class Menu {
 			System.out.println("Meeting could not be added at the specified time!");
 			System.out.println("");
 		}
+	}
+	
+	public void deleteMeeting() {
+		System.out.println("");
+		viewAllMeetings();
+		System.out.println("Choose a meeting you would like to delete");
+		int meetingIndex = UserInput.inputInt() - 1;
+		Meeting meetingToDelete = manager.getLoggedInEmployee().getDiary().get(meetingIndex);
+		manager.deleteMeeting(meetingToDelete);
 	}
 	
 	public LocalDateTime getMeetingDateAndTimeInputFromUser() {
