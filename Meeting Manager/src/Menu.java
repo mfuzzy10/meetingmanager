@@ -154,10 +154,7 @@ public class Menu {
 						break;
 						
 					case "5":
-						/* View Meeting Suggestions Made:
-						 * 
-						 * 
-						 */
+						viewAllMeetingSuggestionsMade();
 						break;
 						
 					case "6":
@@ -168,10 +165,7 @@ public class Menu {
 						break;
 						
 					case "7":
-						/* View Meeting Suggestions Received:
-						 * 
-						 * 
-						 */
+						viewAllMeetingSuggestionsReceived();
 						break;
 						
 					case "8":
@@ -232,13 +226,27 @@ public class Menu {
 		System.out.println("Meeting starts:");
 		System.out.println("");
 
-		LocalDateTime startTime = getMeetingDateAndTimeInputFromUser();
 		
-		System.out.println("");
-		System.out.println("Meeting ends:");
-		System.out.println("");
+		LocalDateTime startTime;
+		startTime = getMeetingDateAndTimeInputFromUser();
 		
-		LocalDateTime endTime = getMeetingDateAndTimeInputFromUser();
+		
+		boolean validInput = false;
+		LocalDateTime endTime;
+		
+		do  {
+			System.out.println("");
+			System.out.println("Meeting ends:");
+			System.out.println("");
+			endTime = getMeetingDateAndTimeInputFromUser();
+			if (endTime.isAfter(startTime)) {
+				validInput = true;
+			} else {
+				System.out.println("End time of the meeting must not precede the start time of the meeting");
+			}
+		} while (validInput == false);
+		
+		
 		
 		Meeting meetingToAdd = new Meeting(title, description, startTime, endTime);
 		
@@ -386,6 +394,48 @@ public class Menu {
 			System.out.println("# Employee " + (i+1));
 			System.out.println("# First Name: " + employees[i].getFirstName() + "   Last Name: " + employees[i].getLastName());
 			System.out.println("# Department: " + employees[i].getDepartment() + "   Unique Username: " + employees[i].getUniqueUsername());
+			System.out.println("");
+		}
+		
+		System.out.println("");
+	}
+	
+	public void viewAllMeetingSuggestionsReceived() {
+		
+		System.out.println("");
+		
+		MeetingSuggestion[] meetingSuggestion = manager.getArrayOfMeetingSuggestionsReceived();
+		
+		for (int i = 0; i < meetingSuggestion.length; i++) {
+			
+			Meeting meetingDetails = meetingSuggestion[i].getMeetingDetails();
+			LocalDateTime startTime = meetingDetails.getStartTime();
+			LocalDateTime endTime = meetingDetails.getEndTime();
+			
+			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
+			System.out.println("# Meeting Start: " + startTime.getYear() + "/" + startTime.getMonthValue() + "/" + startTime.getDayOfMonth() + " @ " + startTime.getHour() + ":" + startTime.getMinute());
+			System.out.println("# Meeting End: " + endTime.getYear() + "/" + endTime.getMonthValue() + "/" + endTime.getDayOfMonth() + " @ " + endTime.getHour() + ":" + endTime.getMinute());
+			System.out.println("");
+		}
+		
+		System.out.println("");
+	}
+
+	public void viewAllMeetingSuggestionsMade() {
+		
+		System.out.println("");
+		
+		MeetingSuggestion[] meetingSuggestion = manager.getArrayOfMeetingSuggestionsMade();
+		
+		for (int i = 0; i < meetingSuggestion.length; i++) {
+			
+			Meeting meetingDetails = meetingSuggestion[i].getMeetingDetails();
+			LocalDateTime startTime = meetingDetails.getStartTime();
+			LocalDateTime endTime = meetingDetails.getEndTime();
+			
+			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
+			System.out.println("# Meeting Start: " + startTime.getYear() + "/" + startTime.getMonthValue() + "/" + startTime.getDayOfMonth() + " @ " + startTime.getHour() + ":" + startTime.getMinute());
+			System.out.println("# Meeting End: " + endTime.getYear() + "/" + endTime.getMonthValue() + "/" + endTime.getDayOfMonth() + " @ " + endTime.getHour() + ":" + endTime.getMinute());
 			System.out.println("");
 		}
 		

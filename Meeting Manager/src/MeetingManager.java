@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 
 public class MeetingManager {
@@ -18,6 +20,26 @@ public class MeetingManager {
 		employees.add(matt);
 		employees.add(archie);
 		employees.add(oskar);
+		
+		LocalDateTime startTime = LocalDateTime.parse("2018-03-26T16:00:00");
+		
+		LocalDateTime endTime = LocalDateTime.parse("2018-03-26T18:00:00");
+		
+		Meeting meeting = new Meeting("Some Meeting","Meeting Desc", startTime, endTime);
+		
+		MeetingSuggestion meetingSuggestion = new MeetingSuggestion(meeting, admin);
+		
+		admin.getMeetingSuggestionsReceived().add(meetingSuggestion);
+		roman.getMeetingSuggestionsReceived().add(meetingSuggestion);
+		matt.getMeetingSuggestionsReceived().add(meetingSuggestion);
+		archie.getMeetingSuggestionsReceived().add(meetingSuggestion);
+		oskar.getMeetingSuggestionsReceived().add(meetingSuggestion);
+		
+		Employee suggestedTo[] = {admin, roman, matt, archie, oskar};
+		
+		MeetingSuggestionMade meetingSuggestionMade = new MeetingSuggestionMade(meeting, suggestedTo);
+		
+		admin.getMeetingSuggestionsMade().add(meetingSuggestionMade);
 	}
 	
 	/**
@@ -202,11 +224,36 @@ public class MeetingManager {
 		this.employees = employees;
 	}
 	
+	/**
+	 * @return array of references of all Employees
+	 */
 	public Employee[] getArrayOfAllEmployees() {
 		
 		Employee[] employeesArray = employees.toArray(new Employee[employees.size()]);
 		
 		return employeesArray;
+	}
+	
+	/**
+	 * @return array of references of all MeetingSuggestionsReceived by loggedInEmployee 
+	 */
+	public MeetingSuggestion[] getArrayOfMeetingSuggestionsReceived() {
+		
+		MeetingSuggestion[] meetingSuggestionsReceivedArray = loggedInEmployee.getMeetingSuggestionsReceived().toArray(new MeetingSuggestion[loggedInEmployee.getMeetingSuggestionsReceived().size()]);
+		
+		return meetingSuggestionsReceivedArray;
+		
+	}
+	
+	/**
+	 * @return array of references of all MeetingSuggestions Made by loggedInEmployee 
+	 */
+	public MeetingSuggestion[] getArrayOfMeetingSuggestionsMade() {
+		
+		MeetingSuggestion[] meetingSuggestionsMadeArray = loggedInEmployee.getMeetingSuggestionsMade().toArray(new MeetingSuggestion[loggedInEmployee.getMeetingSuggestionsMade().size()]);
+		
+		return meetingSuggestionsMadeArray;
+		
 	}
 	
 }
