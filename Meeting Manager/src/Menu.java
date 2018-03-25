@@ -470,6 +470,31 @@ public class Menu {
 		
 	}
 	
+	public void viewAllMeetings() {
+		System.out.println("");
+		
+		String title;
+		LocalDateTime startTime;
+		LocalDateTime endTime;
+		String description;
+		
+		for(int i = 0; i < manager.getLoggedInEmployee().getDiary().size(); i++) {
+			
+			title = manager.getLoggedInEmployee().getDiary().get(i).getTitle();
+			startTime = manager.getLoggedInEmployee().getDiary().get(i).getStartTime();
+			endTime = manager.getLoggedInEmployee().getDiary().get(i).getEndTime();
+			description = manager.getLoggedInEmployee().getDiary().get(i).getDescription();
+			
+			System.out.println("# " + "Meeting " + (i+1));
+			System.out.println("# " + title);
+			System.out.println("# " + getGoodDate(startTime) + " - " + getGoodDate(endTime));
+			System.out.println("# " + description);
+			System.out.println("");
+			
+		}
+		System.out.println("");
+	}
+	
 	public String getGoodDate(LocalDateTime dateTime) {
 		String day = Integer.toString(dateTime.getDayOfMonth());
 		String month = Integer.toString(dateTime.getMonthValue());
