@@ -425,12 +425,17 @@ public class Menu {
 		
 		MeetingSuggestion[] meetingSuggestion = manager.getArrayOfMeetingSuggestionsReceived();
 		
+		Meeting meetingDetails;
+		LocalDateTime startTime;
+		LocalDateTime endTime;
+		Employee suggestedBy;
+		
 		for (int i = 0; i < meetingSuggestion.length; i++) {
 			
-			Meeting meetingDetails = meetingSuggestion[i].getMeetingDetails();
-			LocalDateTime startTime = meetingDetails.getStartTime();
-			LocalDateTime endTime = meetingDetails.getEndTime();
-			Employee suggestedBy = meetingSuggestion[i].getSuggestedBy();
+			meetingDetails = meetingSuggestion[i].getMeetingDetails();
+			startTime = meetingDetails.getStartTime();
+			endTime = meetingDetails.getEndTime();
+			suggestedBy = meetingSuggestion[i].getSuggestedBy();
 			
 			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
 			System.out.println("# Meeting Start: " + getGoodDate(startTime));
@@ -450,12 +455,17 @@ public class Menu {
 		
 		MeetingSuggestionMade[] meetingSuggestion = manager.getArrayOfMeetingSuggestionsMade();
 		
+		Meeting meetingDetails;
+		LocalDateTime startTime;
+		LocalDateTime endTime;
+		Employee[] suggestedTo;
+		
 		for (int i = 0; i < meetingSuggestion.length; i++) {
 			
-			Meeting meetingDetails = meetingSuggestion[i].getMeetingDetails();
-			LocalDateTime startTime = meetingDetails.getStartTime();
-			LocalDateTime endTime = meetingDetails.getEndTime();
-			Employee[] suggestedTo = meetingSuggestion[i].getSuggestedTo();
+			meetingDetails = meetingSuggestion[i].getMeetingDetails();
+			startTime = meetingDetails.getStartTime();
+			endTime = meetingDetails.getEndTime();
+			suggestedTo = meetingSuggestion[i].getSuggestedTo();
 			
 			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
 			System.out.println("# Meeting Start: " + getGoodDate(startTime));
@@ -562,7 +572,7 @@ public class Menu {
 			manager.getEmployees().add(newEmployee);
 		}
 		else {
-			System.out.println("Requires admin account");
+			System.out.println("You do not have permission to add new users");
 		}
 		System.out.println("");		
 	}
@@ -577,7 +587,7 @@ public class Menu {
 				boolean employeeToDelete = manager.getEmployees().remove(manager.getEmployees().get(employeeIndex));
 			}
 			else {
-				System.out.println("Requires admin account");
+				System.out.println("You do not have permission remove users");
 			}
 		}
 		else {
