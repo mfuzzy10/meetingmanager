@@ -418,8 +418,8 @@ public class Menu {
 			Employee suggestedBy = meetingSuggestion[i].getSuggestedBy();
 			
 			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
-			System.out.println("# Meeting Start: " + startTime.getYear() + "/" + startTime.getMonthValue() + "/" + startTime.getDayOfMonth() + " @ " + startTime.getHour() + ":" + startTime.getMinute());
-			System.out.println("# Meeting End: " + endTime.getYear() + "/" + endTime.getMonthValue() + "/" + endTime.getDayOfMonth() + " @ " + endTime.getHour() + ":" + endTime.getMinute());
+			System.out.println("# Meeting Start: " + getGoodDate(startTime));
+			System.out.println("# Meeting End: " + getGoodDate(endTime));
 			System.out.println("#");
 			System.out.println("# Suggested By: ");
 			System.out.println("# First Name: " + suggestedBy.getFirstName() + "   Last Name: " + suggestedBy.getLastName() + "   Department: " + suggestedBy.getDepartment() + "   Unique Username: " + suggestedBy.getUniqueUsername());
@@ -443,8 +443,8 @@ public class Menu {
 			Employee[] suggestedTo = meetingSuggestion[i].getSuggestedTo();
 			
 			System.out.println("# Meeting Suggestion " + (i+1) + " - " + meetingDetails.getTitle());
-			System.out.println("# Meeting Start: " + startTime.getYear() + "/" + startTime.getMonthValue() + "/" + startTime.getDayOfMonth() + " @ " + startTime.getHour() + ":" + startTime.getMinute());
-			System.out.println("# Meeting End: " + endTime.getYear() + "/" + endTime.getMonthValue() + "/" + endTime.getDayOfMonth() + " @ " + endTime.getHour() + ":" + endTime.getMinute());
+			System.out.println("# Meeting Start: " + getGoodDate(startTime));
+			System.out.println("# Meeting End: " + getGoodDate(endTime));
 			System.out.println("#");
 			System.out.println("# Suggested To: ");
 			for (Employee employee : suggestedTo) {
@@ -465,6 +465,29 @@ public class Menu {
 		
 	}
 	
+	public String getGoodDate(LocalDateTime dateTime) {
+		String day = Integer.toString(dateTime.getDayOfMonth());
+		String month = Integer.toString(dateTime.getMonthValue());
+		String year = Integer.toString(dateTime.getYear());
+		String hour = Integer.toString(dateTime.getHour());
+		String minute = Integer.toString(dateTime.getMinute());
+
+		if(Integer.parseInt(day) < 10) {
+			day = "0" + day;
+		}
+		if(Integer.parseInt(month) < 10) {
+			month = "0" + month;
+		} 
+		if(Integer.parseInt(hour) < 10) {
+			hour = "0" + hour;
+		} 
+		if(Integer.parseInt(minute) < 10) {
+			minute = "0" + minute;
+		}
+		
+		String goodDate = hour + ":" + minute + " - " + day + "/" + month + "/" + year;
+		return goodDate;
+	}
 }
 
 	
