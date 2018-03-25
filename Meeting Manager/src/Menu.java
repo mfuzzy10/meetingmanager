@@ -262,11 +262,17 @@ public class Menu {
 	
 	public void deleteMeeting() {
 		System.out.println("");
-		viewAllMeetings();
-		System.out.println("Choose a meeting you would like to delete");
-		int meetingIndex = UserInput.inputInt() - 1;
-		Meeting meetingToDelete = manager.getLoggedInEmployee().getDiary().get(meetingIndex);
-		manager.deleteMeeting(meetingToDelete);
+		if(!manager.getLoggedInEmployee().getDiary().isEmpty()) {
+			viewAllMeetings();
+			System.out.println("Choose a meeting you would like to delete");
+			int meetingIndex = UserInput.inputInt() - 1;
+			Meeting meetingToDelete = manager.getLoggedInEmployee().getDiary().get(meetingIndex);
+			manager.deleteMeeting(meetingToDelete);
+		}
+		else {
+			System.out.println("You have no scheduled meetings");
+		}
+		System.out.println("");
 	}
 	
 	public LocalDateTime getMeetingDateAndTimeInputFromUser() {
