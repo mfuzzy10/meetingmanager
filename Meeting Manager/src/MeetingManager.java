@@ -23,26 +23,6 @@ public class MeetingManager {
 		employees.add(matt);
 		employees.add(archie);
 		employees.add(oskar);
-		
-		LocalDateTime startTime = LocalDateTime.parse("2018-03-26T16:00:00");
-		
-		LocalDateTime endTime = LocalDateTime.parse("2018-03-26T18:00:00");
-		
-		Meeting meeting = new Meeting("Some Meeting","Meeting Desc", startTime, endTime);
-		
-		MeetingSuggestion meetingSuggestion = new MeetingSuggestion(meeting, admin);
-		
-		admin.getMeetingSuggestionsReceived().add(meetingSuggestion);
-		roman.getMeetingSuggestionsReceived().add(meetingSuggestion);
-		matt.getMeetingSuggestionsReceived().add(meetingSuggestion);
-		archie.getMeetingSuggestionsReceived().add(meetingSuggestion);
-		oskar.getMeetingSuggestionsReceived().add(meetingSuggestion);
-		
-		Employee suggestedTo[] = {admin, roman, matt, archie, oskar};
-		
-		MeetingSuggestionMade meetingSuggestionMade = new MeetingSuggestionMade(meeting, suggestedTo);
-		
-		admin.getMeetingSuggestionsMade().add(meetingSuggestionMade);
 	}
 	
 	/**
@@ -380,6 +360,214 @@ public class MeetingManager {
 		this.employees = employees;
 	}
 	
+	public void saveMeetingData() {
+		if (!employees.isEmpty()) {
+
+	        FileOutputStream outputStream = null;
+	        PrintWriter printWriter = null;
+	        
+	        try
+	        {
+	        	
+	        	Files.createDirectories(Paths.get("saves/"));
+	        	
+	            int employeeIndex = 0;
+	            
+	            for (Employee employee : employees) {
+	            	
+	            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/employeedetails"));
+	            	
+	            	outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employeedetails/firstname.txt");
+		            printWriter = new PrintWriter(outputStream);
+		            printWriter.println(employee.getFirstName());
+		            
+		            printWriter.close();
+		            
+		            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employeedetails/lastname.txt");
+		            printWriter = new PrintWriter(outputStream);
+		            printWriter.println(employee.getLastName());
+		            
+		            printWriter.close();
+		            
+		            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employeedetails/username.txt");
+		            printWriter = new PrintWriter(outputStream);
+		            printWriter.println(employee.getUniqueUsername());
+		            
+		            printWriter.close();
+		            
+		            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employeedetails/password.txt");
+		            printWriter = new PrintWriter(outputStream);
+		            printWriter.println(employee.getPassword());
+		            
+		            printWriter.close();
+		            
+		            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employeedetails/accounttype.txt");
+		            printWriter = new PrintWriter(outputStream);
+		            printWriter.println(employee.getAccountType());
+		            
+		            printWriter.close();
+		            
+		            int index = 0;
+		            
+		            for (Meeting meeting : employee.getDiary()) {
+		            	
+		            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meetings/meeting" + index));
+		            	
+		            	outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/title.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meeting.getTitle());
+			            
+			            printWriter.close();
+			            
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/description.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meeting.getDescription());
+			            
+			            printWriter.close();
+			            
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/starttime.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meeting.getStartTime());
+			            
+			            printWriter.close();
+			            
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/endtime.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meeting.getEndTime());
+			            
+			            printWriter.close();
+			            
+			            index++;
+		            	
+		            }
+		            
+		            index = 0;
+		            
+		            for (MeetingSuggestion meetingSuggestionReceived : employee.getMeetingSuggestionsReceived()) {
+		            	
+		            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index));
+		            	
+		            	outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/suggested-by.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meetingSuggestionReceived.getSuggestedBy());
+			            
+			            printWriter.close();
+			            
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/title.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meetingSuggestionReceived.getMeetingDetails().getTitle());
+			            
+			            printWriter.close();
+			            
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/desciption.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meetingSuggestionReceived.getMeetingDetails().getDescription());
+			            
+			            printWriter.close();
+			            
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/starttime.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meetingSuggestionReceived.getMeetingDetails().getStartTime());
+			            
+			            printWriter.close();
+
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/endtime.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meetingSuggestionReceived.getMeetingDetails().getEndTime());
+			            
+			            printWriter.close();
+			            
+		            }
+		            
+		            for (MeetingSuggestionMade meetingSuggestionMade : employee.getMeetingSuggestionsMade()) {
+		            	
+		            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index));
+			            
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/title.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meetingSuggestionMade.getMeetingDetails().getTitle());
+			            
+			            printWriter.close();
+			            
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/desciption.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meetingSuggestionMade.getMeetingDetails().getDescription());
+			            
+			            printWriter.close();
+			            
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/starttime.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meetingSuggestionMade.getMeetingDetails().getStartTime());
+			            
+			            printWriter.close();
+
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/endtime.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(meetingSuggestionMade.getMeetingDetails().getEndTime());
+			            
+			            printWriter.close();
+			            
+			            int index2 = 0;
+			            
+			            for (Employee suggestedTo : meetingSuggestionMade.getSuggestedTo()) {
+			            	
+			            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/suggested-to"));
+			            	
+			            	outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/suggested-to/employee" + index2 + ".txt");
+				            printWriter = new PrintWriter(outputStream);
+				            printWriter.println(suggestedTo);
+				            
+				            printWriter.close();
+				            
+				            index2++;
+			            	
+			            }
+			            
+			            index ++;
+			            
+		            }
+		            
+		            index = 0;
+		            
+		            for (Notification notification : employee.getNotifications()) {
+		            	
+		            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/notifications/notification" + index));
+		            	
+		            	outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/notifications/notification" + index + "/title.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(notification.getTitle());
+			            
+			            printWriter.close();
+			            
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/notifications/notification" + index + "/content.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(notification.getContent());
+		            	
+			            printWriter.close();
+			            
+			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/notifications/notification" + index + "/from.txt");
+			            printWriter = new PrintWriter(outputStream);
+			            printWriter.println(notification.getFrom());
+			            
+			            printWriter.close();
+			            
+		            }
+		            
+		            employeeIndex++;
+		            
+				}
+	            
+
+				outputStream.close();
+	        }
+	        catch (IOException e)
+	        {
+	            System.out.println("Error in file write: " + e);
+	        }
+		} else {
+			System.out.println("There are no records to save. Save not performed.");
+		}
+	}
 }
 
 
