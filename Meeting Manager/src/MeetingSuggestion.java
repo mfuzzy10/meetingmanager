@@ -1,4 +1,6 @@
-
+/**
+ * The MeetingSuggestion class stores a meeting suggested by an employee
+ */
 public class MeetingSuggestion {
 
 	private Meeting meetingDetails;
