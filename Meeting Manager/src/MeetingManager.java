@@ -2,7 +2,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedList;
-
+/**
+ * The MeetingManager class contains all the meeting managing methods for employees: add/delete/edit meetings, suggest/cancel meetings and save/load a meeting to a file
+ */
 public class MeetingManager {
 
 	private Employee loggedInEmployee;
@@ -171,8 +173,13 @@ public class MeetingManager {
 	 * @param cancelationExplenation explanation for why the meeting was cancelled
 	 * 		  if necessary
 	 */
-	public void cancelMeeting(MeetingSuggestionMade meetingToCancel, String cancelationExplenation) {
-		
+	public void cancelMeeting(MeetingSuggestionMade meetingToCancel, String cancelationExplanation) {
+		for(int i = 0; i < meetingToCancel.getSuggestedTo().length; i++) {
+			Notification notification = new Notification(getLoggedInEmployee(), "Meeting Cancellation", cancelationExplanation);
+			meetingToCancel.getSuggestedTo()[i].addNotification(notification);
+			MeetingSuggestion MS = new MeetingSuggestion(meetingToCancel.getMeetingDetails() ,getLoggedInEmployee());
+			meetingToCancel.getSuggestedTo()[i].getMeetingSuggestionsReceived().remove(MS);
+		}
 	}
 	
 	/**
