@@ -1,4 +1,6 @@
-
+/**
+ * The Notification class contains the person it was sent from as well as the notification's title and contents
+ */
 public class Notification {
 
 	private Employee from;
