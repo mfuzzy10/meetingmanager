@@ -1,5 +1,7 @@
 import java.time.LocalDateTime;
-
+/**
+ * The TimePeriod class contains two dates and can compare them
+ */
 public class TimePeriod implements Comparable<TimePeriod> {
 
 	private LocalDateTime startTime;
