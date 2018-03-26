@@ -256,6 +256,78 @@ public class MeetingManager {
 		
 	}
 	
+	public TimePeriod[] availabilitySearch(Employee[] employees, LocalDateTime startTime, LocalDateTime endTime) {
+		
+		LinkedList<TimePeriod> notFreeTimes = new LinkedList<TimePeriod>();
+		TimePeriod tempTimePeriod;
+		
+		for (Employee employee : employees) {
+			Collections.sort(employee.getDiary());
+			
+			for (Meeting meeting : employee.getDiary()) {
+				if (notFreeTimes.isEmpty()) {
+					tempTimePeriod = new TimePeriod(meeting.getStartTime(), meeting.getEndTime());
+					notFreeTimes.add(tempTimePeriod);
+				} else {
+					
+					TimePeriod newNotFreeTimePeriod = new TimePeriod(meeting.getStartTime(), meeting.getEndTime());
+					
+					for (TimePeriod notFreeTimePeriod : notFreeTimes) {
+						
+						if (newNotFreeTimePeriod.getStartTime().isAfter(notFreeTimePeriod.getStartTime()) && newNotFreeTimePeriod.getStartTime().isBefore(notFreeTimePeriod.getEndTime())) {
+							newNotFreeTimePeriod.setStartTime(notFreeTimePeriod.getStartTime());
+							notFreeTimes.remove(notFreeTimePeriod);
+							
+						} else if (newNotFreeTimePeriod.getEndTime().isAfter(notFreeTimePeriod.getStartTime()) && newNotFreeTimePeriod.getEndTime().isBefore(notFreeTimePeriod.getEndTime())) {
+							newNotFreeTimePeriod.setEndTime(notFreeTimePeriod.getEndTime());
+							notFreeTimes.remove(notFreeTimePeriod);
+							
+						} else if (newNotFreeTimePeriod.getStartTime().isAfter(notFreeTimePeriod.getStartTime()) && newNotFreeTimePeriod.getEndTime().isBefore(notFreeTimePeriod.getEndTime())) {
+							newNotFreeTimePeriod = new TimePeriod(notFreeTimePeriod.getStartTime(), notFreeTimePeriod.getEndTime());
+							break;
+							
+						} else /* if (meeting.getStartTime().isBefore(notFreeTimePeriod.getStartTime()) && meeting.getEndTime().isAfter(notFreeTimePeriod.getEndTime())) */ {
+							notFreeTimes.remove(notFreeTimePeriod);
+							
+						}
+					}
+					
+					notFreeTimes.add(newNotFreeTimePeriod);
+					Collections.sort(notFreeTimes);
+					
+				}
+			}
+		}
+		
+		if (notFreeTimes.isEmpty()) {
+			return new TimePeriod[]{new TimePeriod(startTime, endTime)};
+		}
+		
+		
+		LinkedList<TimePeriod> freeTimes = new LinkedList<TimePeriod>();
+		
+		LocalDateTime tempStartTime = startTime;
+		LocalDateTime tempEndTime = endTime;
+		
+		for (TimePeriod notFreeTimePeriod : notFreeTimes) {
+			if (tempStartTime.equals(notFreeTimePeriod.getStartTime())) {
+				tempStartTime = notFreeTimePeriod.getEndTime();
+			} else {
+				tempEndTime = notFreeTimePeriod.getStartTime();
+				freeTimes.add(new TimePeriod(tempStartTime, tempEndTime));
+				tempStartTime = notFreeTimePeriod.getEndTime();
+			}
+		}
+		
+		if (tempEndTime != endTime) {
+			tempEndTime = endTime;
+			freeTimes.add(new TimePeriod(tempStartTime, tempEndTime));
+		}
+		
+		return freeTimes.toArray(new TimePeriod[freeTimes.size()]);
+			
+	}
+	
 }
 
 
