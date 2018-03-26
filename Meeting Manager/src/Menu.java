@@ -2,6 +2,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Menu {
 
@@ -128,7 +129,7 @@ public class Menu {
 					switch (option) {
 							
 					case "0":
-						manager.setLoggedInEmployee(null);
+						manager.logOut();
 						break;	
 							
 					case "1":
@@ -552,7 +553,8 @@ public class Menu {
 			}
 			
 			Employee newEmployee = new Employee(firstName, lastName, username, password, department, accountType);
-			manager.getEmployees().add(newEmployee);
+			String feedbackMessage = manager.addEmployee(newEmployee);
+			System.out.println(feedbackMessage);
 		}
 		else {
 			System.out.println("You do not have permission to add new users");
@@ -567,7 +569,9 @@ public class Menu {
 				viewAllEmployees();
 				System.out.println("Choose an employee you would like to delete");
 				int employeeIndex = UserInput.inputInt() - 1;
-				boolean employeeToDelete = manager.getEmployees().remove(manager.getEmployees().get(employeeIndex));
+				Employee[] allEmployees = manager.getArrayOfAllEmployees();
+				String feedbackMessage = manager.removeEmployee(allEmployees[employeeIndex]);
+				System.out.println(feedbackMessage);
 			}
 			else {
 				System.out.println("You do not have permission remove users");
@@ -607,23 +611,46 @@ public class Menu {
 		
 		Employee[] employeesForAvailabiltySearchArray = employeesForAvailabiltySearch.toArray(new Employee[employeesForAvailabiltySearch.size()]);
 		
-		System.out.println("");
-		System.out.println("Search start:");
-		System.out.println("");
-		LocalDateTime startTime = getMeetingDateAndTimeInputFromUser();
-		System.out.println("");
-		System.out.println("Search end:");
-		System.out.println("");
-		LocalDateTime endTime = getMeetingDateAndTimeInputFromUser();
+		LocalDateTime startTime = null;
+		LocalDateTime endTime = null;
+		
+		boolean validInput = false;
+		
+		while (validInput == false) {
+			System.out.println("");
+			System.out.println("Search start:");
+			System.out.println("");
+			startTime = getMeetingDateAndTimeInputFromUser();
+			System.out.println("");
+			System.out.println("Search end:");
+			System.out.println("");
+			endTime = getMeetingDateAndTimeInputFromUser();
+			
+			if (startTime.isAfter(endTime)) {
+				System.out.println("Search end time cannot precede search end time");
+				System.out.println("Enter new times: ");
+			} else if (startTime.isEqual(endTime)) {
+				System.out.println("Search start and end times cannot be the same");
+				System.out.println("Enter new times: ");
+			} else {
+				validInput = true;
+			}
+		}
+		
+		
+		long searchStartTime = System.nanoTime();
 		
 		TimePeriod[] availableTimes = manager.availabilitySearch(employeesForAvailabiltySearchArray, startTime, endTime);
+		
+		long searchCompleteTime = System.nanoTime() - searchStartTime;
+		System.out.println("# Search completed in: " + searchCompleteTime + " seconds");
 
-		System.out.println("");
-		System.out.println("Common free times:");
-		System.out.println("");
+		System.out.println("#");
+		System.out.println("# Common free times:");
+		System.out.println("#");
 		
 		for (TimePeriod timePeriod : availableTimes) {
-			System.out.println(getGoodDate(timePeriod.getStartTime()) + " to " + getGoodDate(timePeriod.getEndTime()));
+			System.out.println("# " + getGoodDate(timePeriod.getStartTime()) + " to " + getGoodDate(timePeriod.getEndTime()));
 		}
 		
 	}

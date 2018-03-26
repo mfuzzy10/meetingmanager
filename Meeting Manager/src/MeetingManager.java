@@ -62,6 +62,10 @@ public class MeetingManager {
 		return false;
 	}
 	
+	public void logOut() {
+		setLoggedInEmployee(null);
+	}
+	
 	/**
 	 * This method adds the Meeting passed in by reference to
 	 * the diary of the loggedInEmployee, if there is space for the
@@ -198,34 +202,6 @@ public class MeetingManager {
 	}
 	
 	/**
-	 * @return the loggedInEmployee
-	 */
-	public Employee getLoggedInEmployee() {
-		return loggedInEmployee;
-	}
-
-	/**
-	 * @param loggedInEmployee the loggedInEmployee to set
-	 */
-	public void setLoggedInEmployee(Employee loggedInEmployee) {
-		this.loggedInEmployee = loggedInEmployee;
-	}
-
-	/**
-	 * @return the employees
-	 */
-	public LinkedList getEmployees() {
-		return employees;
-	}
-
-	/**
-	 * @param employees the employees to set
-	 */
-	public void setEmployees(LinkedList employees) {
-		this.employees = employees;
-	}
-	
-	/**
 	 * @return array of references of all Employees
 	 */
 	public Employee[] getArrayOfAllEmployees() {
@@ -327,6 +303,74 @@ public class MeetingManager {
 		
 		return freeTimes.toArray(new TimePeriod[freeTimes.size()]);
 			
+	}
+	
+	public String removeEmployee(Employee employeeToRemove) {
+		if (loggedInEmployee.getAccountType() == AccountType.ADMIN) {
+			employees.remove(employeeToRemove);
+			return "Employee successfully removed";
+		}
+		
+		return "You not have permission to remove employees";
+		
+	}
+	
+	/**
+	 * @param employeeToAdd
+	 * @return true: employee was added successfully; false: employee wasn't added successfully
+	 */
+	public String addEmployee(Employee employeeToAdd) {
+		if (this.loggedInEmployee.getAccountType() == AccountType.ADMIN) {
+			if (isUsernameFree(employeeToAdd.getUniqueUsername())) {
+				this.employees.add(employeeToAdd);
+				return "Employee successfully added";
+			} else {
+				return "Employee with this username already exists";
+			}
+		}
+		return "You do not have permission to add employees";
+	}
+	
+	/**
+	 * @param username username to check against the existing usernames
+	 * @return true: username is free; false: username is in use
+	 */
+	public boolean isUsernameFree(String username) {
+		
+		for (Employee employee : employees) {
+			if (employee.getUniqueUsername().equals(username)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * @return the loggedInEmployee
+	 */
+	public Employee getLoggedInEmployee() {
+		return loggedInEmployee;
+	}
+
+	/**
+	 * @param loggedInEmployee the loggedInEmployee to set
+	 */
+	private void setLoggedInEmployee(Employee loggedInEmployee) {
+		this.loggedInEmployee = loggedInEmployee;
+	}
+
+	/**
+	 * @return the employees
+	 */
+	public LinkedList getEmployees() {
+		return employees;
+	}
+
+	/**
+	 * @param employees the employees to set
+	 */
+	private void setEmployees(LinkedList employees) {
+		this.employees = employees;
 	}
 	
 }
