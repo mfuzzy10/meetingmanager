@@ -1,5 +1,9 @@
 import java.util.LinkedList;
-
+/**
+ * The Employee class contains all the information for an employee including their credentials (first name, last name) 
+ * and account information (username, password), as well as their meeting diary containing all their meetings.
+ * It also has the meeting suggestions they proposed to other employees and any meetings suggested to them.
+ */
 public class Employee {
 
 	private LinkedList<Meeting> diary;
