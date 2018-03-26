@@ -2,7 +2,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedList;
-
+/**
+ * The MeetingManager class contains all the meeting managing methods for employees: add/delete/edit meetings, suggest/cancel meetings and save/load a meeting to a file
+ */
 public class MeetingManager {
 
 	private Employee loggedInEmployee;
