@@ -3,7 +3,9 @@ import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-
+/**
+ * The Menu class
+ */
 public class Menu {
 
 	private final int CURRENT_YEAR;
@@ -33,14 +35,15 @@ public class Menu {
 		System.out.println("7) Cancel Meeting Suggestion Made");
 		System.out.println("8) View Meeting Suggestions Received");
 		System.out.println("9) Respond to Meeting Suggestion Received");
-		System.out.println("10) View All Employees");
+		System.out.println("10) View Notifications");
+		System.out.println("11) View All Employees");
 		
 	}
 	
 	public void displayAdminOptions() {
 		displayUserOptions();
-		System.out.println("11) Add Employee");
-		System.out.println("12) Remove Employee");
+		System.out.println("12) Add Employee");
+		System.out.println("13) Remove Employee");
 	}
 	
 	public void runMenu() {
@@ -129,7 +132,7 @@ public class Menu {
 					switch (option) {
 							
 					case "0":
-						manager.logOut();
+						manager.setLoggedInEmployee(null);
 						break;	
 							
 					case "1":
@@ -145,13 +148,7 @@ public class Menu {
 						break;
 						
 					case "4":
-						/* Suggest Meeting:
-						 * 
-						 * 1) Get meeting details from user
-						 * 2) Get list of employees to suggest the meeting to from user
-						 * 3) Send the meeting suggestion
-						 * 
-						 */
+						suggestMeeting();
 						break;
 						
 					case "5":
@@ -163,10 +160,7 @@ public class Menu {
 						break;
 						
 					case "7":
-						/* Cancel Meeting Suggestion Made:
-						 * 
-						 * 
-						 */
+						cancelMeeting();
 						break;
 						
 					case "8":
@@ -178,19 +172,24 @@ public class Menu {
 						 * 
 						 * 
 						 */
+						System.out.println("Not Yet Implemented");
 						break;
 						
 					case "10":
+						viewNotifications();
+						break;
+					
+					case "11":
 						viewAllEmployees();
 						break;
-						
-					case "11":
+
+					case "12":
 						if(manager.getLoggedInEmployee().getAccountType() == AccountType.ADMIN) {
 							addEmployee();
 						}
 						break;
 						
-					case "12":
+					case "13":
 						if(manager.getLoggedInEmployee().getAccountType() == AccountType.ADMIN) {
 							removeEmployee();
 						}
@@ -198,7 +197,6 @@ public class Menu {
 						
 					default:
 						System.out.println("Option: '" + option + "' does not exists");
-						
 					}
 					
 				}
@@ -348,6 +346,24 @@ public class Menu {
 			suggestedEmployeesArray[i].getMeetingSuggestionsReceived().add(MS);
 		}
 		manager.getLoggedInEmployee().getMeetingSuggestionsMade().add(MSM);
+		System.out.println("");
+	}
+	
+		public void cancelMeeting() {
+		System.out.println("");
+		if(!manager.getLoggedInEmployee().getMeetingSuggestionsMade().isEmpty()) {
+			viewAllMeetingSuggestionsMade();
+			System.out.println("Choose a meeting suggestion you would like to cancel");
+			int meetingIndex = UserInput.inputInt() - 1;
+			MeetingSuggestionMade MSM = manager.getLoggedInEmployee().getMeetingSuggestionsMade().get(meetingIndex);
+			System.out.println("State the reason for cancellation");
+			String reason = UserInput.inputString();
+
+			manager.cancelMeeting(MSM, reason);
+		}
+		else {
+			System.out.println("There are no active meeting suggestions");
+		}
 		System.out.println("");
 	}
 	
@@ -640,6 +656,18 @@ public class Menu {
 			System.out.println("You do not have permission to add new users");
 		}
 		System.out.println("");		
+	}
+	
+	public void viewNotifications() {
+		System.out.println("");
+		for(int i = 0; i < manager.getLoggedInEmployee().getNotifications().size(); i++) {
+			System.out.println("# Notification " + (i+1));
+			System.out.println("# " + manager.getLoggedInEmployee().getNotifications().get(i).getFrom().getFirstName() + " " + manager.getLoggedInEmployee().getNotifications().get(i).getFrom().getLastName());
+			System.out.println("# " + manager.getLoggedInEmployee().getNotifications().get(i).getTitle());
+			System.out.println("# " + manager.getLoggedInEmployee().getNotifications().get(i).getContent());
+			System.out.println("");
+		}
+		System.out.println("");
 	}
 	
 	public void removeEmployee() {
