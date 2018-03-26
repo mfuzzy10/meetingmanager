@@ -271,6 +271,86 @@ public class Menu {
 		System.out.println("");
 	}
 	
+	public void suggestMeeting() {
+		System.out.println("Enter meeting details: ");
+		System.out.println("");
+		
+		System.out.println("title:");
+		String title = UserInput.inputString();
+		System.out.println("");
+		
+		System.out.println("description:");
+		String description = UserInput.inputString();
+		System.out.println("");
+		
+		System.out.println("");
+		System.out.println("Meeting starts:");
+		System.out.println("");
+
+		
+		LocalDateTime startTime;
+		startTime = getMeetingDateAndTimeInputFromUser();
+		
+		
+		boolean validInput = false;
+		LocalDateTime endTime;
+		
+		do  {
+			System.out.println("");
+			System.out.println("Meeting ends:");
+			System.out.println("");
+			endTime = getMeetingDateAndTimeInputFromUser();
+			if (endTime.isAfter(startTime)) {
+				validInput = true;
+			} else {
+				System.out.println("End time of the meeting must not precede the start time of the meeting");
+			}
+		} while (validInput == false);
+		
+		Meeting suggestedMeeting = new Meeting(title, description, startTime, endTime);
+		LinkedList<Employee> suggestedEmployeesList = new LinkedList<Employee>();
+		Employee[] suggestedEmployeesArray = null;
+		Employee suggestedEmployee = null;
+		
+		System.out.println("");
+		
+		int option;
+		do {
+			if(!manager.getEmployees().isEmpty()) {
+				viewAllEmployees();
+				System.out.println("Choose an employee you would like to suggest the meeting to");
+				int employeeIndex = UserInput.inputInt() - 1;
+				suggestedEmployee = (Employee) manager.getEmployees().get(employeeIndex);
+				suggestedEmployeesList.add(suggestedEmployee);
+				
+				System.out.println("Suggest the meeting to another employee?");
+				System.out.println("1) YES   2) NO");
+				option = UserInput.inputInt();
+				if(option != 1) {
+					break;
+				}
+				
+				
+			}
+			else {
+				System.out.println("There are no more employees");
+				break;
+			}
+		} while(option == 1);
+
+		suggestedEmployeesArray = new Employee[suggestedEmployeesList.size()];
+		for(int i = 0; i < suggestedEmployeesList.size(); i++) {
+			suggestedEmployeesArray[i] = suggestedEmployeesList.get(i);
+		}
+		MeetingSuggestion MS = new MeetingSuggestion(suggestedMeeting, manager.getLoggedInEmployee());
+		MeetingSuggestionMade MSM = new MeetingSuggestionMade(suggestedMeeting, suggestedEmployeesArray);
+		for(int i = 0; i < suggestedEmployeesArray.length; i++) {
+			suggestedEmployeesArray[i].getMeetingSuggestionsReceived().add(MS);
+		}
+		manager.getLoggedInEmployee().getMeetingSuggestionsMade().add(MSM);
+		System.out.println("");
+	}
+	
 	public LocalDateTime getMeetingDateAndTimeInputFromUser() {
 
 		String year = null;
