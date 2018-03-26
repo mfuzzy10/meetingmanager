@@ -1,5 +1,7 @@
 import java.util.LinkedList;
-
+/**
+ * The Employee class contains all the information for an employee including their credentials, account information and meetings diary
+ */
 public class Employee {
 
 	private LinkedList<Meeting> diary;
