@@ -1,8 +1,7 @@
 import java.util.Random;
 import java.util.Scanner;
 /**
- * @author Roman
- *
+ * The UserInput class contains general sanitized methods for inputing a string and inputting an integer
  */
 public class UserInput {
 	/**
@@ -31,28 +30,6 @@ public class UserInput {
 		}
 		catch(java.util.InputMismatchException e) {
 			return null;
-		}
-	}
-
-	/**
-	 * returns an int between the given min and max numbers
-	 *
-	 */	
-	public static int randInt(int min, int max) {
-		Random rand = new Random();						
-		int number = rand.nextInt((max - min) + 1) + min;
-		return number;
-	}
-	
-	/**
-	 * waits a certain amount of time
-	 *
-	 */	
-	public static void sleep(int msecs) {
-		try {
-			Thread.sleep(msecs);
-		} 
-		catch (InterruptedException e) {
 		}
 	}
 }
