@@ -178,6 +178,8 @@ public class Employee {
 		this.department = department;
 	}
 	
-	
+	public void addNotification(Notification notification) {
+		notifications.add(notification);
+	}
 	
 }
