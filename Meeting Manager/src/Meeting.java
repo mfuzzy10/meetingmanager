@@ -1,5 +1,7 @@
 import java.time.LocalDateTime;
-
+/**
+ * The Meeting class contains all the information about a meeting such as its starting/ending times and the title/description of the meeting
+ */
 public class Meeting implements Comparable<Meeting> {
 
 	private String title;
