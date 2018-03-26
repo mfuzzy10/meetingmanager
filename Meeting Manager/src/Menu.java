@@ -153,14 +153,11 @@ public class Menu {
 						break;
 						
 					case "5":
-						/* Availability Search:
-						 * 
-						 * 
-						 */
+						availabilitySeatch();
 						break;
 						
 					case "6":
-//						viewAllMeetingSuggestionsMade();
+						viewAllMeetingSuggestionsMade();
 						break;
 						
 					case "7":
@@ -588,6 +585,55 @@ public class Menu {
 			System.out.println("There are no employees");
 		}
 		System.out.println("");
+	}
+	
+	public void availabilitySearch() {
+		
+		Employee[] allEmployees = manager.getArrayOfAllEmployees();
+		LinkedList<Employee> employeesForAvailabiltySearch = new LinkedList<Employee>();
+		int option;
+		
+		do {
+			viewAllEmployees();
+			
+			System.out.println("Enter number of employee to add to the availability search: ");
+			
+			do {
+				option = UserInput.inputInt();
+			} while (option < 1 || option > allEmployees.length);
+			
+			employeesForAvailabiltySearch.add(allEmployees[option-1]);
+				
+			System.out.println("Do you wish to add another employee to the search?");
+			System.out.println("1) YES   2) NO");
+			
+			do {
+				option = UserInput.inputInt();
+			} while (option < 1 || option > 2);
+			
+		} while(option == 1);
+		
+		Employee[] employeesForAvailabiltySearchArray = employeesForAvailabiltySearch.toArray(new Employee[employeesForAvailabiltySearch.size()]);
+		
+		System.out.println("");
+		System.out.println("Search start:");
+		System.out.println("");
+		LocalDateTime startTime = getMeetingDateAndTimeInputFromUser();
+		System.out.println("");
+		System.out.println("Search end:");
+		System.out.println("");
+		LocalDateTime endTime = getMeetingDateAndTimeInputFromUser();
+		
+		TimePeriod[] availableTimes = manager.availabilitySearch(employeesForAvailabiltySearchArray, startTime, endTime);
+
+		System.out.println("");
+		System.out.println("Common free times:");
+		System.out.println("");
+		
+		for (TimePeriod timePeriod : availableTimes) {
+			System.out.println(getGoodDate(timePeriod.getStartTime()) + " to " + getGoodDate(timePeriod.getEndTime()));
+		}
+		
 	}
 }
 
