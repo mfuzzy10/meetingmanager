@@ -1,4 +1,6 @@
-
+/**
+ * The MeetingSuggestion class stores a meeting suggested and all the employees to whom said meeting was suggested
+ */
 public class MeetingSuggestionMade {
 	private Meeting meetingDetails;
 	private Employee[] suggestedTo;
