@@ -18,7 +18,7 @@ public class UserInput {
 		}
 	}
 	/**
-	 * asks the user to input a number 
+	 * Asks the user to input a number 
 	 *
 	 */	
 	public static String inputString() {
