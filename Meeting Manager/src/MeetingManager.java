@@ -177,10 +177,6 @@ public class MeetingManager {
 		return null;
 	}
 	
-	public void saveMeetingData() {
-		
-	}
-	
 	/**
 	 * @return true: data loaded successfully; false: data not loaded successfully (i.e. Employees AccountType does not have permission to load data)
 	 */
