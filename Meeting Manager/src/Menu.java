@@ -4,7 +4,8 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 /**
- * The Menu class
+ * The Menu class contains the login screen for the employee to log in
+ * It also contains all the program features the logged in employee can use such as making a meeting or viewing notifications
  */
 public class Menu {
 
