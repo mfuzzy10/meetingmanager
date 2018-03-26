@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Menu {
@@ -153,7 +154,7 @@ public class Menu {
 						break;
 						
 					case "5":
-						availabilitySeatch();
+						availabilitySearch();
 						break;
 						
 					case "6":
@@ -470,15 +471,6 @@ public class Menu {
 		}
 		
 		System.out.println("");
-	}
-	
-	/*
-	 * 1) S
-	 */
-	public void availabilitySearch() {
-		
-		System.out.println("Enter ");
-		
 	}
 	
 	public void viewAllMeetings() {

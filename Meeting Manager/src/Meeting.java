@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class Meeting {
+public class Meeting implements Comparable<Meeting> {
 
 	private String title;
 	private String description;
@@ -12,6 +12,14 @@ public class Meeting {
 		this.description = description;
 		this.startTime = startTime;
 		this.endTime = endTime;
+	}
+	
+	public int compareTo(Meeting compareMeeting) {
+
+		LocalDateTime compareStartTime = ((Meeting) compareMeeting).getStartTime();
+		
+		return this.startTime.compareTo(compareStartTime);
+		
 	}
 	
 	/**
