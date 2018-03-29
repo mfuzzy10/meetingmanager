@@ -1,8 +1,7 @@
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
+
 /**
  * The Menu class contains the login screen for the employee to log in
  * It also contains all the program features the logged in employee can use such as making a meeting or viewing notifications
@@ -133,7 +132,7 @@ public class Menu {
 					switch (option) {
 							
 					case "0":
-						manager.setLoggedInEmployee(null);
+						manager.logOut();
 						break;	
 							
 					case "1":
@@ -169,10 +168,7 @@ public class Menu {
 						break;
 						
 					case "9":
-						/* Respond to Meeting Suggestion Received:
-						 * 
-						 * 
-						 */
+						respondToReceivedMeetingSuggestions();
 						System.out.println("Not Yet Implemented");
 						break;
 						
@@ -588,7 +584,7 @@ public class Menu {
 			
 			System.out.println("# " + "Meeting " + (i+1));
 			System.out.println("# " + title);
-			System.out.println("# " + getGoodDate(startTime) + " - " + getGoodDate(endTime));
+			System.out.println("# " + getGoodDate(startTime) + " to " + getGoodDate(endTime));
 			System.out.println("# " + description);
 			System.out.println("");
 			
@@ -663,8 +659,10 @@ public class Menu {
 		System.out.println("");
 		for(int i = 0; i < manager.getLoggedInEmployee().getNotifications().size(); i++) {
 			System.out.println("# Notification " + (i+1));
-			System.out.println("# " + manager.getLoggedInEmployee().getNotifications().get(i).getFrom().getFirstName() + " " + manager.getLoggedInEmployee().getNotifications().get(i).getFrom().getLastName());
+			System.out.println("# From: " + manager.getLoggedInEmployee().getNotifications().get(i).getFrom().getFirstName() + " " + manager.getLoggedInEmployee().getNotifications().get(i).getFrom().getLastName());
+			System.out.println("#");
 			System.out.println("# " + manager.getLoggedInEmployee().getNotifications().get(i).getTitle());
+			System.out.println("#");
 			System.out.println("# " + manager.getLoggedInEmployee().getNotifications().get(i).getContent());
 			System.out.println("");
 		}
@@ -760,6 +758,56 @@ public class Menu {
 		
 		for (TimePeriod timePeriod : availableTimes) {
 			System.out.println("# " + getGoodDate(timePeriod.getStartTime()) + " to " + getGoodDate(timePeriod.getEndTime()));
+		}	
+	}
+	
+	public void respondToReceivedMeetingSuggestions() {
+		if (!manager.getLoggedInEmployee().getMeetingSuggestionsReceived().isEmpty()) {
+			viewAllMeetingSuggestionsReceived();
+			
+			boolean validInput = false;
+			int suggestionOption;
+			int acceptOrDecline;
+			
+			do {
+				System.out.println("Enter the number of meeting suggestion you wish to accept:");
+				suggestionOption = UserInput.inputInt();
+				
+				if (suggestionOption > 0 && suggestionOption < (manager.getLoggedInEmployee().getMeetingSuggestionsReceived().size() + 1)) {
+					validInput = true;
+				} else {
+					System.out.println("Invalid input");
+				}
+				
+			} while (validInput == false);
+			
+			validInput = false;
+			
+			do {
+				System.out.println("1) Accept   2) Decline:");
+				acceptOrDecline = UserInput.inputInt();
+				
+				if (acceptOrDecline > 0 && acceptOrDecline < 3) {
+					validInput = true;
+				} else {
+					System.out.println("Invalid input");
+				}
+				
+			} while (validInput == false);
+			
+			if (acceptOrDecline == 1) {
+				manager.getLoggedInEmployee().getDiary().add(manager.getLoggedInEmployee().getMeetingSuggestionsReceived().get(suggestionOption-1).getMeetingDetails());
+				manager.getLoggedInEmployee().getMeetingSuggestionsReceived().remove(manager.getLoggedInEmployee().getMeetingSuggestionsReceived().get(suggestionOption-1));
+			} else {
+				System.out.println("Please provide a reason for declining thie meetin suggestion: ");
+				String declineReason = UserInput.inputString();
+				Employee suggestedBy = manager.getLoggedInEmployee().getMeetingSuggestionsReceived().get(suggestionOption-1).getSuggestedBy();
+				suggestedBy.getNotifications().add(new Notification(manager.getLoggedInEmployee(), "Cannnot Attend Meeting - " + manager.getLoggedInEmployee().getMeetingSuggestionsReceived().get(suggestionOption-1).getMeetingDetails().getTitle(), "Reason: " + declineReason));
+				manager.getLoggedInEmployee().getMeetingSuggestionsReceived().remove(manager.getLoggedInEmployee().getMeetingSuggestionsReceived().get(suggestionOption-1));
+			}
+			
+		} else {
+			System.out.println("You have no meeting suggestions");
 		}
 		
 	}

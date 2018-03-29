@@ -1,4 +1,13 @@
-import java.time.LocalDate;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -11,18 +20,12 @@ public class MeetingManager {
 	private LinkedList<Employee> employees;
 	
 	public MeetingManager() {
+		
 		loggedInEmployee = null;
 		employees = new LinkedList<Employee>();
-		Employee admin = new Employee("admin", "admin", "admin", "admin", "Computing", AccountType.ADMIN);
-		Employee roman = new Employee("Roman", "Brodskiy", "romanbrodskiy",  "admin", "Computing", AccountType.ADMIN);
-		Employee matt = new Employee("Matt", "Robb", "mattrobb", "admin", "Computing", AccountType.ADMIN);
-		Employee archie = new Employee("Archie", "Chalmers", "archiechalmers", "admin", "Computing", AccountType.ADMIN);
-		Employee oskar = new Employee("Oskar", "Jankowski", "oskarjankowski", "admin", "Computing", AccountType.ADMIN);
-		employees.add(admin);
-		employees.add(roman);
-		employees.add(matt);
-		employees.add(archie);
-		employees.add(oskar);
+		
+		loadMeetingData();
+		
 	}
 	
 	/**
@@ -30,6 +33,7 @@ public class MeetingManager {
 	 * @return true: logged in successfully; false: not logged in successfully (i.e. details don't match)
 	 */
 	public boolean logIn(String username, String password) {
+		
 		for (Employee employee : employees) {
 			if (username.equals(employee.getUniqueUsername())) {
 				if (password.equals(employee.getPassword())) {
@@ -45,6 +49,7 @@ public class MeetingManager {
 	}
 	
 	public void logOut() {
+		saveMeetingData();
 		setLoggedInEmployee(null);
 	}
 	
@@ -154,12 +159,26 @@ public class MeetingManager {
 	 * 		  if necessary
 	 */
 	public void cancelMeeting(MeetingSuggestionMade meetingToCancel, String cancelationExplanation) {
-		for(int i = 0; i < meetingToCancel.getSuggestedTo().length; i++) {
-			Notification notification = new Notification(getLoggedInEmployee(), "Meeting Cancellation", cancelationExplanation);
-			meetingToCancel.getSuggestedTo()[i].addNotification(notification);
-			MeetingSuggestion MS = new MeetingSuggestion(meetingToCancel.getMeetingDetails() ,getLoggedInEmployee());
-			meetingToCancel.getSuggestedTo()[i].getMeetingSuggestionsReceived().remove(MS);
+		
+		Notification notification = new Notification(getLoggedInEmployee(), "Meeting Cancellation - " + meetingToCancel.getMeetingDetails().getTitle(), "Reason: " + cancelationExplanation);
+		
+		MeetingSuggestion meetingSuggestionToCancel = null;
+		
+		for(MeetingSuggestion meetingSugesstion : meetingToCancel.getSuggestedTo()[0].getMeetingSuggestionsReceived()) {
+			if (meetingSugesstion.getMeetingDetails() == meetingToCancel.getMeetingDetails()) {
+				meetingSuggestionToCancel = meetingSugesstion;
+				break;
+			}
 		}
+		
+		for (Employee suggestedTo : meetingToCancel.getSuggestedTo()) {
+			suggestedTo.addNotification(notification);
+			suggestedTo.getMeetingSuggestionsReceived().remove(meetingSuggestionToCancel);
+			suggestedTo.getDiary().remove(meetingToCancel.getMeetingDetails());
+		}
+		
+		loggedInEmployee.getMeetingSuggestionsMade().remove(meetingToCancel);
+		
 	}
 	
 	/**
@@ -175,13 +194,6 @@ public class MeetingManager {
 	
 	public MeetingSuggestionMade[] showMeetingSuggestionsMade() {
 		return null;
-	}
-	
-	/**
-	 * @return true: data loaded successfully; false: data not loaded successfully (i.e. Employees AccountType does not have permission to load data)
-	 */
-	public boolean loadMeetingData() {
-		return false;
 	}
 	
 	/**
@@ -345,224 +357,574 @@ public class MeetingManager {
 	/**
 	 * @return the employees
 	 */
-	public LinkedList getEmployees() {
+	public LinkedList<Employee> getEmployees() {
 		return employees;
 	}
 
 	/**
 	 * @param employees the employees to set
 	 */
-	private void setEmployees(LinkedList employees) {
+	private void setEmployees(LinkedList<Employee> employees) {
 		this.employees = employees;
+	}
+	
+	//Borrowed temporarily from stackoverflow: https://stackoverflow.com/questions/13195797/delete-all-files-in-directory-but-not-directory-one-liner-solution/13195870
+	private void purgeDirectory(File dir) {
+	    for (File file: dir.listFiles()) {
+	        if (file.isDirectory()) purgeDirectory(file);
+	        file.delete();
+	    }
 	}
 	
 	public void saveMeetingData() {
 		if (!employees.isEmpty()) {
 
-	        FileOutputStream outputStream = null;
-	        PrintWriter printWriter = null;
-	        
-	        try
-	        {
-	        	
-	        	Files.createDirectories(Paths.get("saves/"));
-	        	
-	            int employeeIndex = 0;
-	            
-	            for (Employee employee : employees) {
-	            	
-	            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/employeedetails"));
-	            	
-	            	outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employeedetails/firstname.txt");
-		            printWriter = new PrintWriter(outputStream);
-		            printWriter.println(employee.getFirstName());
-		            
-		            printWriter.close();
-		            
-		            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employeedetails/lastname.txt");
-		            printWriter = new PrintWriter(outputStream);
-		            printWriter.println(employee.getLastName());
-		            
-		            printWriter.close();
-		            
-		            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employeedetails/username.txt");
-		            printWriter = new PrintWriter(outputStream);
-		            printWriter.println(employee.getUniqueUsername());
-		            
-		            printWriter.close();
-		            
-		            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employeedetails/password.txt");
-		            printWriter = new PrintWriter(outputStream);
-		            printWriter.println(employee.getPassword());
-		            
-		            printWriter.close();
-		            
-		            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employeedetails/accounttype.txt");
-		            printWriter = new PrintWriter(outputStream);
-		            printWriter.println(employee.getAccountType());
-		            
-		            printWriter.close();
-		            
-		            int index = 0;
-		            
-		            for (Meeting meeting : employee.getDiary()) {
-		            	
-		            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meetings/meeting" + index));
-		            	
-		            	outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/title.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meeting.getTitle());
-			            
-			            printWriter.close();
-			            
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/description.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meeting.getDescription());
-			            
-			            printWriter.close();
-			            
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/starttime.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meeting.getStartTime());
-			            
-			            printWriter.close();
-			            
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/endtime.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meeting.getEndTime());
-			            
-			            printWriter.close();
-			            
-			            index++;
-		            	
-		            }
-		            
-		            index = 0;
-		            
-		            for (MeetingSuggestion meetingSuggestionReceived : employee.getMeetingSuggestionsReceived()) {
-		            	
-		            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index));
-		            	
-		            	outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/suggested-by.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meetingSuggestionReceived.getSuggestedBy());
-			            
-			            printWriter.close();
-			            
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/title.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meetingSuggestionReceived.getMeetingDetails().getTitle());
-			            
-			            printWriter.close();
-			            
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/desciption.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meetingSuggestionReceived.getMeetingDetails().getDescription());
-			            
-			            printWriter.close();
-			            
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/starttime.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meetingSuggestionReceived.getMeetingDetails().getStartTime());
-			            
-			            printWriter.close();
+			FileOutputStream outputStream = null;
+			PrintWriter printWriter = null;
+			
+			try
+			{
+				purgeDirectory(new File("saves/"));
+				Files.createDirectories(Paths.get("saves/"));
+				
+				int employeeIndex = 0;
+				
+				for (Employee employee : employees) {
+					
+					Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/employee-details"));
+					Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meetings"));
+					Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meeting-suggestions-received"));
+					Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meeting-suggestions-made"));
+					Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/notifications"));
+					
+					outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employee-details/firstname.txt");
+					printWriter = new PrintWriter(outputStream);
+					printWriter.println(employee.getFirstName());
+					
+					printWriter.close();
+					
+					outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employee-details/lastname.txt");
+					printWriter = new PrintWriter(outputStream);
+					printWriter.println(employee.getLastName());
+					printWriter.close();
+					
+					outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employee-details/username.txt");
+					printWriter = new PrintWriter(outputStream);
+					printWriter.println(employee.getUniqueUsername());
+					printWriter.close();
+					
+					outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employee-details/password.txt");
+					printWriter = new PrintWriter(outputStream);
+					printWriter.println(employee.getPassword());
+					printWriter.close();
+					
+					outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employee-details/department.txt");
+					printWriter = new PrintWriter(outputStream);
+					printWriter.println(employee.getDepartment());
+					printWriter.close();
+					
+					outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/employee-details/accounttype.txt");
+					printWriter = new PrintWriter(outputStream);
+					printWriter.println(employee.getAccountType());
+					printWriter.close();
+					
+					int index = 0;
+					
+					for (Meeting meeting : employee.getDiary()) {
+						
+						Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meetings/meeting" + index));
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/title.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meeting.getTitle());
+						printWriter.close();
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/description.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meeting.getDescription());
+						printWriter.close();
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/starttime.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meeting.getStartTime());
+						printWriter.close();
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meetings/meeting" + index + "/endtime.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meeting.getEndTime());
+						printWriter.close();
+						
+						index++;
+						
+					}
+					
+					index = 0;
+					
+					for (MeetingSuggestion meetingSuggestionReceived : employee.getMeetingSuggestionsReceived()) {
+						
+						Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index));
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/suggested-by.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meetingSuggestionReceived.getSuggestedBy().getUniqueUsername());
+						printWriter.close();
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/title.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meetingSuggestionReceived.getMeetingDetails().getTitle());
+						printWriter.close();
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/description.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meetingSuggestionReceived.getMeetingDetails().getDescription());
+						printWriter.close();
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/starttime.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meetingSuggestionReceived.getMeetingDetails().getStartTime());
+						printWriter.close();
 
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/endtime.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meetingSuggestionReceived.getMeetingDetails().getEndTime());
-			            
-			            printWriter.close();
-			            
-		            }
-		            
-		            for (MeetingSuggestionMade meetingSuggestionMade : employee.getMeetingSuggestionsMade()) {
-		            	
-		            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index));
-			            
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/title.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meetingSuggestionMade.getMeetingDetails().getTitle());
-			            
-			            printWriter.close();
-			            
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/desciption.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meetingSuggestionMade.getMeetingDetails().getDescription());
-			            
-			            printWriter.close();
-			            
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/starttime.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meetingSuggestionMade.getMeetingDetails().getStartTime());
-			            
-			            printWriter.close();
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-received/meeting-suggestion-received" + index + "/endtime.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meetingSuggestionReceived.getMeetingDetails().getEndTime());
+						printWriter.close();
+						
+					}
+					
+					for (MeetingSuggestionMade meetingSuggestionMade : employee.getMeetingSuggestionsMade()) {
+						
+						Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index));
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/title.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meetingSuggestionMade.getMeetingDetails().getTitle());
+						printWriter.close();
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/description.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meetingSuggestionMade.getMeetingDetails().getDescription());
+						printWriter.close();
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/starttime.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meetingSuggestionMade.getMeetingDetails().getStartTime());
+						printWriter.close();
 
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/endtime.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(meetingSuggestionMade.getMeetingDetails().getEndTime());
-			            
-			            printWriter.close();
-			            
-			            int index2 = 0;
-			            
-			            for (Employee suggestedTo : meetingSuggestionMade.getSuggestedTo()) {
-			            	
-			            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/suggested-to"));
-			            	
-			            	outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/suggested-to/employee" + index2 + ".txt");
-				            printWriter = new PrintWriter(outputStream);
-				            printWriter.println(suggestedTo);
-				            
-				            printWriter.close();
-				            
-				            index2++;
-			            	
-			            }
-			            
-			            index ++;
-			            
-		            }
-		            
-		            index = 0;
-		            
-		            for (Notification notification : employee.getNotifications()) {
-		            	
-		            	Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/notifications/notification" + index));
-		            	
-		            	outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/notifications/notification" + index + "/title.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(notification.getTitle());
-			            
-			            printWriter.close();
-			            
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/notifications/notification" + index + "/content.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(notification.getContent());
-		            	
-			            printWriter.close();
-			            
-			            outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/notifications/notification" + index + "/from.txt");
-			            printWriter = new PrintWriter(outputStream);
-			            printWriter.println(notification.getFrom());
-			            
-			            printWriter.close();
-			            
-		            }
-		            
-		            employeeIndex++;
-		            
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/endtime.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(meetingSuggestionMade.getMeetingDetails().getEndTime());
+						printWriter.close();
+						
+						int index2 = 0;
+						
+						for (Employee suggestedTo : meetingSuggestionMade.getSuggestedTo()) {
+							
+							Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/suggested-to"));
+							
+							outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/meeting-suggestions-made/meeting-suggestion-made" + index + "/suggested-to/employee" + index2 + ".txt");
+							printWriter = new PrintWriter(outputStream);
+							printWriter.println(suggestedTo.getUniqueUsername());
+							printWriter.close();
+							
+							index2++;
+							
+						}
+						
+						index ++;
+						
+					}
+					
+					index = 0;
+					
+					for (Notification notification : employee.getNotifications()) {
+						
+						Files.createDirectories(Paths.get("saves/employee" + employeeIndex + "/notifications/notification" + index));
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/notifications/notification" + index + "/title.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(notification.getTitle());
+						printWriter.close();
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/notifications/notification" + index + "/content.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(notification.getContent());
+						printWriter.close();
+						
+						outputStream = new FileOutputStream("saves/employee" + employeeIndex + "/notifications/notification" + index + "/from.txt");
+						printWriter = new PrintWriter(outputStream);
+						printWriter.println(notification.getFrom().getUniqueUsername());
+						printWriter.close();
+						
+					}
+					
+					employeeIndex++;
+					
 				}
-	            
+				
 
 				outputStream.close();
-	        }
-	        catch (IOException e)
-	        {
-	            System.out.println("Error in file write: " + e);
-	        }
+			}
+			catch (IOException e)
+			{
+				System.out.println("Error in file write: " + e);
+			}
 		} else {
 			System.out.println("There are no records to save. Save not performed.");
 		}
+	}
+	
+	public void loadMeetingData() {
+		
+		FileReader fileReader = null;
+		BufferedReader bufferedReader = null;
+		File saveFile = null;
+		
+		{
+			try {
+				
+				saveFile = new File("saves/");
+				File[] employeeFiles = null;
+				employeeFiles = saveFile.listFiles();
+				
+				if (employeeFiles.length > 0) {
+					for (File employeeFile : employeeFiles) {
+						
+						Employee newEmployee = null;
+						
+						File employeeDetails = new File(employeeFile + "/employee-details");
+						
+						if (employeeDetails.exists()) {
+							
+							Path employeeDetailsPath = Paths.get(employeeDetails.getPath());
+							
+							if (Files.exists(employeeDetailsPath, LinkOption.NOFOLLOW_LINKS)) {
+								
+								if (Files.exists(Paths.get(employeeDetailsPath + "/firstname.txt"), LinkOption.NOFOLLOW_LINKS) &&
+									Files.exists(Paths.get(employeeDetailsPath + "/lastname.txt"), LinkOption.NOFOLLOW_LINKS) &&
+									Files.exists(Paths.get(employeeDetailsPath + "/username.txt"), LinkOption.NOFOLLOW_LINKS) &&
+									Files.exists(Paths.get(employeeDetailsPath + "/password.txt"), LinkOption.NOFOLLOW_LINKS) &&
+									Files.exists(Paths.get(employeeDetailsPath + "/accounttype.txt"), LinkOption.NOFOLLOW_LINKS)) {
+									
+									String firstName = null;
+									String lastName = null;
+									String username = null;
+									String password = null;
+									String department = null;
+									AccountType accountType = null;
+									
+									fileReader = new FileReader(employeeDetails + "/firstname.txt");
+									bufferedReader = new BufferedReader(fileReader);
+									firstName = bufferedReader.readLine();
+									bufferedReader.close();
+									
+									fileReader = new FileReader(employeeDetails + "/lastname.txt");
+									bufferedReader = new BufferedReader(fileReader);
+									lastName = bufferedReader.readLine();
+									bufferedReader.close();
+										
+									fileReader = new FileReader(employeeDetails + "/username.txt");
+									bufferedReader = new BufferedReader(fileReader);
+									username = bufferedReader.readLine();
+									bufferedReader.close();
+									
+									fileReader = new FileReader(employeeDetails + "/password.txt");
+									bufferedReader = new BufferedReader(fileReader);
+									password = bufferedReader.readLine();
+									bufferedReader.close();
+									
+									fileReader = new FileReader(employeeDetails + "/accounttype.txt");
+									bufferedReader = new BufferedReader(fileReader);
+									String accType = bufferedReader.readLine();
+									bufferedReader.close();
+									
+									if (accType == "USER") {
+										accountType = AccountType.USER;
+									} else {
+										accountType = AccountType.ADMIN;
+									}
+									
+									if (Files.exists(Paths.get(employeeDetailsPath + "/department.txt"), LinkOption.NOFOLLOW_LINKS)) {
+										fileReader = new FileReader(employeeDetails + "/department.txt");
+										bufferedReader = new BufferedReader(fileReader);
+										department = bufferedReader.readLine();
+										bufferedReader.close();
+									}
+									
+									newEmployee = new Employee(firstName, lastName, username, password, department, accountType);
+									employees.add(newEmployee);
+									
+								}		
+							}
+						}
+					}
+				}
+				
+				if (employeeFiles.length > 0) {
+					for (File employeeFile : employeeFiles) {
+						
+						Employee currentEmployee = null;
+						
+						File employeeDetails = new File(employeeFile + "/employee-details");
+						
+						if (employeeDetails.exists()) {
+							
+							Path employeeDetailsPath = Paths.get(employeeDetails.getPath());
+							
+							if (Files.exists(employeeDetailsPath, LinkOption.NOFOLLOW_LINKS)) {
+								
+								if (Files.exists(Paths.get(employeeDetailsPath + "/firstname.txt"), LinkOption.NOFOLLOW_LINKS) &&
+									Files.exists(Paths.get(employeeDetailsPath + "/lastname.txt"), LinkOption.NOFOLLOW_LINKS) &&
+									Files.exists(Paths.get(employeeDetailsPath + "/username.txt"), LinkOption.NOFOLLOW_LINKS) &&
+									Files.exists(Paths.get(employeeDetailsPath + "/password.txt"), LinkOption.NOFOLLOW_LINKS) &&
+									Files.exists(Paths.get(employeeDetailsPath + "/accounttype.txt"), LinkOption.NOFOLLOW_LINKS)) {
+									
+									String username = null;
+										
+									fileReader = new FileReader(employeeDetails + "/username.txt");
+									bufferedReader = new BufferedReader(fileReader);
+									username = bufferedReader.readLine();
+									bufferedReader.close();
+									
+									currentEmployee = getEmployeeByUsername(username);
+									
+									File meetings = new File(employeeFile + "/meetings");
+									File meetingSuggestionsReceived = new File(employeeFile + "/meeting-suggestions-received");
+									File meetingSuggestionsMade = new File(employeeFile + "/meeting-suggestions-made");
+									File notifications = new File(employeeFile + "/notifications");
+									
+									if (meetings.exists()) {
+										File meetingFiles[] = null;
+										meetingFiles = meetings.listFiles();
+										
+										if (meetingFiles.length > 0) {
+											for (File meetingFile : meetingFiles) {
+												
+												Path nextMeetingFilePath = Paths.get(meetingFile.getPath());
+												
+												if (Files.exists(Paths.get(nextMeetingFilePath + "/title.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextMeetingFilePath + "/description.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextMeetingFilePath + "/starttime.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextMeetingFilePath + "/endtime.txt"), LinkOption.NOFOLLOW_LINKS)) {
+
+													String title = null;
+													String description = null;
+													LocalDateTime startTime = null;
+													LocalDateTime endTime = null;		
+													
+													fileReader = new FileReader(nextMeetingFilePath + "/title.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													title = bufferedReader.readLine();
+													bufferedReader.close();
+													
+													fileReader = new FileReader(nextMeetingFilePath + "/description.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													description = bufferedReader.readLine();
+													bufferedReader.close();
+													
+													fileReader = new FileReader(nextMeetingFilePath + "/starttime.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													startTime = LocalDateTime.parse(bufferedReader.readLine());
+													bufferedReader.close();
+													
+													fileReader = new FileReader(nextMeetingFilePath + "/endtime.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													endTime = LocalDateTime.parse(bufferedReader.readLine());
+													bufferedReader.close();
+													
+													currentEmployee.getDiary().add(new Meeting(title, description, startTime, endTime));
+													
+												}
+											}
+										}
+									}
+									
+									if (meetingSuggestionsReceived.exists()) {
+										File meetingSuggestionsReceivedFiles[] = null;
+										meetingSuggestionsReceivedFiles = meetingSuggestionsReceived.listFiles();
+										
+										if (meetingSuggestionsReceivedFiles.length > 0) {
+											for(File receivedMeetingSuggestionFile : meetingSuggestionsReceivedFiles) {
+												
+												Path nextReceivedMeetingSuggestionPath = Paths.get(receivedMeetingSuggestionFile.getPath());
+												
+												if (Files.exists(Paths.get(nextReceivedMeetingSuggestionPath + "/suggested-by.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextReceivedMeetingSuggestionPath + "/title.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextReceivedMeetingSuggestionPath + "/description.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextReceivedMeetingSuggestionPath + "/starttime.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextReceivedMeetingSuggestionPath + "/endtime.txt"), LinkOption.NOFOLLOW_LINKS)) {
+													
+													String suggestedBy = null;
+													String title = null;
+													String description = null;
+													LocalDateTime startTime = null;
+													LocalDateTime endTime = null;		
+													
+													fileReader = new FileReader(nextReceivedMeetingSuggestionPath + "/suggested-by.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													suggestedBy = bufferedReader.readLine();
+													bufferedReader.close();
+													
+													fileReader = new FileReader(nextReceivedMeetingSuggestionPath + "/title.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													title = bufferedReader.readLine();
+													bufferedReader.close();
+													
+													fileReader = new FileReader(nextReceivedMeetingSuggestionPath + "/description.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													description = bufferedReader.readLine();
+													bufferedReader.close();
+													
+													fileReader = new FileReader(nextReceivedMeetingSuggestionPath + "/starttime.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													startTime = LocalDateTime.parse(bufferedReader.readLine());
+													bufferedReader.close();
+													
+													fileReader = new FileReader(nextReceivedMeetingSuggestionPath + "/endtime.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													endTime = LocalDateTime.parse(bufferedReader.readLine());
+													bufferedReader.close();
+													
+													Meeting meetingDetails = new Meeting(title, description, startTime, endTime);
+													
+													currentEmployee.getMeetingSuggestionsReceived().add(new MeetingSuggestion(meetingDetails, getEmployeeByUsername(suggestedBy)));
+													
+												}
+												
+											}
+										}
+									}
+									
+									
+									if (meetingSuggestionsMade.exists()) {
+										File meetingSuggestionsMadeFiles[] = null;
+										meetingSuggestionsMadeFiles = meetingSuggestionsMade.listFiles();
+										
+										if (meetingSuggestionsMadeFiles.length > 0) {
+											for(File madeMeetingSuggestionFile : meetingSuggestionsMadeFiles) {
+												
+												Path nextMadeMeetingSuggestionPath = Paths.get(madeMeetingSuggestionFile.getPath());
+												
+												if (Files.exists(Paths.get(nextMadeMeetingSuggestionPath + "/suggested-to"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextMadeMeetingSuggestionPath + "/title.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextMadeMeetingSuggestionPath + "/description.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextMadeMeetingSuggestionPath + "/starttime.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextMadeMeetingSuggestionPath + "/endtime.txt"), LinkOption.NOFOLLOW_LINKS)) {
+													
+													File suggestedTo = new File(nextMadeMeetingSuggestionPath + "/suggested-to");
+													File[] suggestedToFileArray = suggestedTo.listFiles();
+													
+													LinkedList<Employee> suggestedToList = new LinkedList<Employee>();
+													String title = null;
+													String description = null;
+													LocalDateTime startTime = null;
+													LocalDateTime endTime = null;		
+													
+													fileReader = new FileReader(nextMadeMeetingSuggestionPath + "/title.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													title = bufferedReader.readLine();
+													bufferedReader.close();
+													
+													fileReader = new FileReader(nextMadeMeetingSuggestionPath + "/description.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													description = bufferedReader.readLine();
+													bufferedReader.close();
+													
+													fileReader = new FileReader(nextMadeMeetingSuggestionPath + "/starttime.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													startTime = LocalDateTime.parse(bufferedReader.readLine());
+													bufferedReader.close();
+													
+													fileReader = new FileReader(nextMadeMeetingSuggestionPath + "/endtime.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													endTime = LocalDateTime.parse(bufferedReader.readLine());
+													bufferedReader.close();
+													
+													for (File nextSuggestedTo : suggestedToFileArray) {
+														
+														fileReader = new FileReader(nextSuggestedTo);
+														bufferedReader = new BufferedReader(fileReader);
+														suggestedToList.add(getEmployeeByUsername(bufferedReader.readLine()));
+														bufferedReader.close();
+														
+													}
+													
+													Meeting meetingDetails = new Meeting(title, description, startTime, endTime);
+													
+													currentEmployee.getMeetingSuggestionsMade().add(new MeetingSuggestionMade(meetingDetails, suggestedToList.toArray(new Employee[suggestedToList.size()])));
+													
+												}
+												
+											}
+										}
+									}
+									
+									
+									if (notifications.exists()) {
+										File notificationFiles[] = null;
+										notificationFiles = notifications.listFiles();
+										
+										if (notificationFiles.length > 0) {
+											for(File notificationFile : notificationFiles) {
+												
+												Path nextNotificationPath = Paths.get(notificationFile.getPath());
+												
+												if (Files.exists(Paths.get(nextNotificationPath + "/title.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextNotificationPath + "/content.txt"), LinkOption.NOFOLLOW_LINKS) &&
+													Files.exists(Paths.get(nextNotificationPath + "/from.txt"), LinkOption.NOFOLLOW_LINKS)) {
+													
+													String title = null;
+													String content = null;
+													String from = null;
+													
+													fileReader = new FileReader(notificationFile + "/title.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													title = bufferedReader.readLine();
+													bufferedReader.close();
+													
+													fileReader = new FileReader(notificationFile + "/content.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													content = bufferedReader.readLine();
+													bufferedReader.close();
+													
+													fileReader = new FileReader(notificationFile + "/from.txt");
+													bufferedReader = new BufferedReader(fileReader);
+													from = bufferedReader.readLine();
+													bufferedReader.close();
+													
+													currentEmployee.getNotifications().add(new Notification(getEmployeeByUsername(from), title, content));
+													
+												}
+												
+											}
+										}
+									}
+									
+								}		
+							}
+						}
+					}
+				}
+				
+				
+				fileReader.close();
+				
+			} catch (IOException e) {
+				
+				System.out.println("Error reading from file: " + e);
+				
+			}	
+		}
+	}
+	
+	public Employee getEmployeeByUsername(String username) {
+		
+		for (Employee nextEmployee : employees) {
+			if (nextEmployee.getUniqueUsername().equals(username)) {
+				return nextEmployee;
+			}
+		}
+		
+		return null;
 	}
 }
 
